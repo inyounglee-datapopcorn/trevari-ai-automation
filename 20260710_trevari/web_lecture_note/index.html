@@ -9,12 +9,76 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- Modal for Review -->
+    <div id="review-modal" class="modal-overlay" onclick="if(event.target === this) this.style.display='none'">
+      <div class="modal-content">
+        <button class="modal-close" onclick="document.getElementById('review-modal').style.display='none'">&times;</button>
+        <h2 id="modal-member-name">멤버 이름</h2>
+        <h3 id="modal-review-title">독후감 제목</h3>
+        <p id="modal-review-content">독후감 내용</p>
+      </div>
+    </div>
+    
     <div class="layout">
       <aside class="sidebar" id="sidebar"></aside>
       <main class="main">
         <div class="chapter-tag">트레바리 독서모임</div>
         <h1>내 일에 바로 써먹는 AI 자동화</h1>
         <p class="lead">ChatGPT도, Claude도 써봤습니다. 그런데 막상 내 일에 가져와 붙이려 하면 어디서부터 손대야 할지 막막했을 거예요. 매일 반복되는 자잘한 일은 여전히 손으로 하나하나 처리하고 계실 거고요. 이 모임은 AI로 더 많은 일을 해내기가 아니라, <b>어떤 일은 자동화하고 어떤 일은 사람의 손에 남길지</b> 함께 선을 긋는 모임입니다.<br><br><span style="display:inline-flex; align-items:center; gap:6px; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; font-size: 14.5px; font-weight: 700; color: var(--text);">🙋‍♂️ 참여 인원: 총 17명 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(시작 전 최종 확정 예정)</span></span></p>
+
+        <div class="grass-graph-container" id="grass-graph">
+          <h3 style="margin-top:0;">멤버 활동 현황 (잔디밭)</h3>
+          <!-- Graph will be injected here via JS -->
+        </div>
+        
+        <div class="tools-grid">
+          <!-- Random Picker -->
+          <div class="tool-card picker-card">
+            <h3>🎲 발표자 추첨기</h3>
+            <div class="picker-display" id="picker-result">누구일까요?</div>
+            <button class="action-btn outline" onclick="pickRandomMember()">추첨하기</button>
+          </div>
+          
+          <!-- Timer -->
+          <div class="tool-card timer-card">
+            <h3>⏱️ 발언 타이머</h3>
+            <div class="timer-display" id="timer-display">03:00</div>
+            <div class="timer-controls">
+              <button class="action-btn outline" onclick="setTimer(180)">3분</button>
+              <button class="action-btn outline" onclick="setTimer(300)">5분</button>
+              <button class="action-btn primary" id="timer-toggle-btn" onclick="toggleTimer()">시작</button>
+              <button class="action-btn danger" onclick="resetTimer()">리셋</button>
+            </div>
+          </div>
+          
+          <!-- AI Meeting Notes (n8n & Local AI) -->
+          <div class="tool-card ai-notes-card">
+            <div class="notes-header-flex">
+              <h3>🤖 실시간 회의록 (로컬 AI & n8n)</h3>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="n8n-webhook-url" placeholder="n8n Webhook URL" class="webhook-input" />
+                <button class="action-btn outline" id="mic-btn" onclick="toggleMic()">🎤 마이크 켜기</button>
+              </div>
+            </div>
+            <div class="ai-notes-grid">
+              <div class="ai-notes-col">
+                <div class="col-label">🗣️ 원본 발언 (Real-time)</div>
+                <textarea id="raw-notes" placeholder="마이크를 켜면 맥북 로컬 엔진을 통해 실시간으로 발언이 기록됩니다..."></textarea>
+                <div style="display: flex; gap: 8px;">
+                  <button class="action-btn outline full-width" onclick="summarizeWithOllama()">🦙 Ollama 로컬 요약</button>
+                  <button class="action-btn primary full-width" onclick="summarizeWithN8n()">n8n 전송 & 요약 →</button>
+                </div>
+              </div>
+              <div class="ai-notes-col">
+                <div class="col-label">✨ AI 요약 결과</div>
+                <div id="ai-summary-result" class="summary-result-box">
+                  <span style="color: var(--text-muted);">요약 결과가 여기에 표시됩니다. (Ollama 또는 n8n)</span>
+                </div>
+                <button class="action-btn outline full-width" onclick="copySummary()">결과 복사하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <hr />
 
@@ -81,5 +145,340 @@
       </main>
     </div>
     <script src="sidebar.js" defer></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        fetch('data.json')
+          .then(response => response.json())
+          .then(data => {
+            window.clubMembers = data.members;
+            renderGraph(data);
+          })
+          .catch(error => {
+            console.error('Error loading data:', error);
+            document.getElementById('grass-graph').innerHTML += '<p style="color: #ef4444;">데이터를 불러오지 못했습니다.</p>';
+          });
+      });
+
+      function renderGraph(data) {
+        const container = document.getElementById('grass-graph');
+        const members = data.members.sort((a, b) => a.localeCompare(b, 'ko'));
+        const sessions = data.sessions;
+        const records = data.records;
+        
+        const matrix = document.createElement('div');
+        matrix.className = 'matrix';
+        
+        const headerRow = document.createElement('div');
+        headerRow.className = 'matrix-header';
+        sessions.forEach(sess => {
+          const label = document.createElement('div');
+          label.className = 'event-label';
+          label.textContent = sess.label;
+          headerRow.appendChild(label);
+        });
+        matrix.appendChild(headerRow);
+        
+        const guests = data.guests || [];
+        
+        members.forEach(member => {
+          const row = document.createElement('div');
+          row.className = 'matrix-row';
+          
+          const nameEl = document.createElement('div');
+          nameEl.className = 'member-name';
+          if (guests.includes(member)) {
+            nameEl.innerHTML = `${member} <span style="font-size: 11px; font-weight: 500; color: var(--accent-strong);">(놀러가기)</span>`;
+          } else {
+            nameEl.textContent = member;
+          }
+          row.appendChild(nameEl);
+          
+          const boxesEl = document.createElement('div');
+          boxesEl.className = 'event-boxes';
+          
+          sessions.forEach(sess => {
+            const att = records[member]?.[`${sess.id}_attendance`] || false;
+            const rev = records[member]?.[`${sess.id}_review`] || false;
+            
+            const box = document.createElement('div');
+            box.className = 'event-box split-box';
+            
+            box.style.setProperty('--color-top-left', att ? '#40c463' : '#ebedf0');
+            box.style.setProperty('--color-bottom-right', rev ? '#40c463' : '#ebedf0');
+            
+            box.dataset.tooltip = `${member} - ${sess.label} (출석: ${att ? 'O' : 'X'}, 독후감: ${rev ? 'O' : 'X'})`;
+            
+            if (rev && data.reviews && data.reviews[sess.id] && data.reviews[sess.id][member]) {
+              box.style.cursor = 'pointer';
+              box.onclick = () => {
+                const reviewData = data.reviews[sess.id][member];
+                document.getElementById('modal-member-name').textContent = `${member} 님의 ${sess.label} 독후감`;
+                document.getElementById('modal-review-title').textContent = reviewData.title;
+                document.getElementById('modal-review-content').textContent = reviewData.content;
+                document.getElementById('review-modal').style.display = 'flex';
+              };
+            }
+            
+            boxesEl.appendChild(box);
+          });
+          
+          row.appendChild(boxesEl);
+          matrix.appendChild(row);
+        });
+        
+        container.appendChild(matrix);
+      }
+      
+      // Random Picker
+      let pickerInterval;
+      function pickRandomMember() {
+        const members = window.clubMembers || [];
+        if (members.length === 0) return;
+        
+        const display = document.getElementById('picker-result');
+        const btn = document.querySelector('.picker-card .action-btn');
+        btn.disabled = true;
+        
+        let ticks = 0;
+        clearInterval(pickerInterval);
+        display.style.color = 'var(--text)';
+        
+        pickerInterval = setInterval(() => {
+          const randomName = members[Math.floor(Math.random() * members.length)];
+          display.textContent = randomName;
+          display.style.transform = 'scale(1.05)';
+          setTimeout(() => display.style.transform = 'scale(1)', 50);
+          
+          ticks++;
+          if (ticks > 25) {
+            clearInterval(pickerInterval);
+            const winner = members[Math.floor(Math.random() * members.length)];
+            display.textContent = `🎉 ${winner} 🎉`;
+            display.style.color = 'var(--accent-strong)';
+            display.style.transform = 'scale(1.15)';
+            setTimeout(() => display.style.transform = 'scale(1)', 300);
+            btn.disabled = false;
+          }
+        }, 50);
+      }
+
+      // Timer
+      let timerInterval;
+      let timeLeft = 180;
+      let timerRunning = false;
+      let totalTime = 180;
+
+      function updateTimerDisplay() {
+        const display = document.getElementById('timer-display');
+        const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const s = (timeLeft % 60).toString().padStart(2, '0');
+        display.textContent = `${m}:${s}`;
+        
+        if (timeLeft === 0) {
+          display.style.color = '#ef4444';
+        } else if (timeLeft <= 30) {
+          display.style.color = '#eab308';
+        } else {
+          display.style.color = 'var(--text)';
+        }
+      }
+
+      function setTimer(seconds) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        timeLeft = seconds;
+        totalTime = seconds;
+        document.getElementById('timer-toggle-btn').textContent = '시작';
+        updateTimerDisplay();
+      }
+
+      function toggleTimer() {
+        const btn = document.getElementById('timer-toggle-btn');
+        if (timerRunning) {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          btn.textContent = '계속';
+        } else {
+          if (timeLeft === 0) setTimer(totalTime);
+          timerRunning = true;
+          btn.textContent = '일시정지';
+          timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            if (timeLeft <= 0) {
+              clearInterval(timerInterval);
+              timerRunning = false;
+              btn.textContent = '종료';
+            }
+          }, 1000);
+        }
+      }
+
+      function resetTimer() {
+        setTimer(totalTime);
+      }
+      
+      // AI Notes & n8n
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedUrl = localStorage.getItem('n8nWebhookUrl');
+        if (savedUrl) {
+          document.getElementById('n8n-webhook-url').value = savedUrl;
+        }
+      });
+
+      async function summarizeWithN8n() {
+        const urlInput = document.getElementById('n8n-webhook-url');
+        const rawText = document.getElementById('raw-notes').value;
+        const resultBox = document.getElementById('ai-summary-result');
+        
+        const url = urlInput.value.trim();
+        if (url) localStorage.setItem('n8nWebhookUrl', url);
+        
+        if (!url) {
+          alert("n8n Webhook URL을 입력해주세요. (실습에서 만든 워크플로우 URL)");
+          urlInput.focus();
+          return;
+        }
+        if (!rawText.trim()) {
+          alert("요약할 원본 발언을 입력해주세요.");
+          document.getElementById('raw-notes').focus();
+          return;
+        }
+        
+        resultBox.innerHTML = '<span style="color: var(--accent-strong);">n8n 워크플로우로 데이터를 전송 중입니다... ⏳</span>';
+        
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: rawText })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            resultBox.textContent = data.summary || data.text || JSON.stringify(data, null, 2);
+          } else {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+        } catch (err) {
+          resultBox.innerHTML = `
+            <span style="color: #ef4444;">웹훅 호출 실패! (CORS 에러이거나 URL이 잘못되었습니다)</span>
+            <br><br>
+            <small style="color: var(--text-muted);">※ n8n 웹훅 노드 설정에서 'Respond to Webhook' 옵션과 CORS 설정을 확인하세요.<br>※ 현재는 데모용 가짜 요약 결과를 출력합니다.</small>
+            <br><br>
+            <strong>[데모 요약 결과]</strong><br>
+            - 오늘 모임의 주요 안건: 업무 자동화의 필요성과 n8n 실습<br>
+            - 다수결 의견: 생각보다 API 연동이 까다롭지만 효과적임<br>
+            - <strong>Next Action:</strong> 다음 주까지 각자 API Key 1개씩 발급해오기
+          `;
+        }
+      }
+
+      function copySummary() {
+        const text = document.getElementById('ai-summary-result').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          alert("요약 결과가 복사되었습니다!");
+        });
+      }
+      
+      // Web Speech API (Local Dictation on Mac)
+      let recognition;
+      let isRecording = false;
+
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'ko-KR';
+
+        recognition.onresult = (event) => {
+          let finalTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript + ' ';
+            }
+          }
+          if (finalTranscript) {
+            const rawNotes = document.getElementById('raw-notes');
+            rawNotes.value += finalTranscript;
+            rawNotes.scrollTop = rawNotes.scrollHeight;
+          }
+        };
+
+        recognition.onerror = (event) => {
+          console.error("Speech recognition error", event.error);
+        };
+      }
+
+      function toggleMic() {
+        if (!recognition) {
+          alert("현재 브라우저에서는 실시간 음성 인식을 지원하지 않습니다. (Chrome 또는 Safari 권장)");
+          return;
+        }
+        const btn = document.getElementById('mic-btn');
+        if (isRecording) {
+          recognition.stop();
+          isRecording = false;
+          btn.innerHTML = '🎤 마이크 켜기';
+          btn.classList.remove('danger');
+          btn.classList.add('outline');
+        } else {
+          recognition.start();
+          isRecording = true;
+          btn.innerHTML = '🛑 녹음 중지...';
+          btn.classList.remove('outline');
+          btn.classList.add('danger');
+          document.getElementById('raw-notes').placeholder = '맥북 로컬 엔진이 음성을 듣고 실시간으로 타이핑하고 있습니다...';
+        }
+      }
+
+      // Local Ollama Summary
+      async function summarizeWithOllama() {
+        const rawText = document.getElementById('raw-notes').value;
+        const resultBox = document.getElementById('ai-summary-result');
+        
+        if (!rawText.trim()) {
+          alert("요약할 원본 발언을 먼저 입력하거나 마이크로 녹음해주세요.");
+          return;
+        }
+        
+        resultBox.innerHTML = '<span style="color: var(--accent-strong);">🦙 로컬 Ollama 모델(Llama 3 등)로 요약 중입니다... ⏳</span><br><br><small style="color: var(--text-muted);">※ 맥북에 Ollama가 설치되어 실행 중이어야 합니다. (기본 포트: 11434)</small>';
+        
+        try {
+          const response = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'llama3', // Ollama에 설치된 모델 이름으로 변경 가능 (예: llama3, mistral)
+              prompt: `다음 회의 발언 내용을 세 줄로 핵심만 명확하게 요약해 줘. 무조건 한국어로 답변해.\n\n발언 내용:\n${rawText}`,
+              stream: false
+            })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            resultBox.innerHTML = `<strong>[Ollama 로컬 요약]</strong><br><br>${data.response.replace(/\\n/g, '<br>')}`;
+          } else {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+        } catch (err) {
+          console.error(err);
+          resultBox.innerHTML = `
+            <span style="color: #ef4444;">Ollama 연결 실패!</span>
+            <br><br>
+            <small style="color: var(--text-muted);">
+            ※ 이유: 로컬 맥북에 Ollama가 켜져 있지 않거나, 모델('llama3')이 설치되어 있지 않습니다.<br>
+            ※ 실행 방법: 터미널에서 <code>ollama run llama3</code> 입력 후 다시 시도해 보세요.
+            </small>
+            <br><br>
+            <strong>[데모 요약 결과]</strong><br>
+            - 업무 자동화는 필수불가결한 요소임.<br>
+            - n8n과 로컬 AI를 결합하면 보안과 비용 모두 잡을 수 있음.<br>
+            - <strong>Next Action:</strong> Ollama 설치 및 llama3 모델 다운로드해 오기
+          `;
+        }
+      }
+    </script>
   </body>
 </html>
