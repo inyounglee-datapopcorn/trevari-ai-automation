@@ -211,10 +211,12 @@
     return window.marked.parse(md);
   }
 
-  async function buildBeautifiedHtml(onProgress) {
+  async function buildBeautifiedHtml(onProgress, isPrint = false) {
     const md = await buildCombinedMarkdown(onProgress);
     const bodyHtml = await getMarkedHtml(md);
     
+    const printScript = isPrint ? "<script>setTimeout(() => { window.print(); }, 1000);</script>" : "";
+
     return `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -228,11 +230,11 @@
   </style>
 </head>
 <body class="markdown-body">
-  \${bodyHtml}
+  ${bodyHtml}
   <div style="margin-top: 50px; text-align: center; color: #888; font-size: 12px; border-top: 1px solid #eaecef; padding-top: 20px;">
     ⓒ 데이터팝콘(datapopcorn) · 독서모임 전용 학습 자료입니다. 무단 외부 반출·복제·재배포를 금합니다.
   </div>
-  <script>setTimeout(() => { if(window.location.search.includes('print=true')) window.print(); }, 1000);</script>
+  ${printScript}
 </body>
 </html>`;
   }
@@ -277,9 +279,9 @@
   };
 
   const printPdf = async progress => {
-    const output = await buildBeautifiedHtml((i, n) => progress(i + '/' + n));
+    const output = await buildBeautifiedHtml((i, n) => progress(i + '/' + n), true);
     const blob = new Blob([output], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob) + '?print=true';
+    const url = URL.createObjectURL(blob);
     const printWindow = window.open(url, '_blank');
     if (!printWindow) {
       alert('팝업이 차단되어 PDF 인쇄 창을 열 수 없습니다. HTML로 저장한 뒤 인쇄해주세요.');
