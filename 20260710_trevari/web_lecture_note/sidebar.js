@@ -171,7 +171,7 @@
         if (tag === 'hr') return '\n\n---\n\n';
         
         if (tag === 'div' || tag === 'section' || tag === 'article' || tag === 'main') {
-          return '\n' + inner + '\n';
+          return inner;
         }
         
         return inner;
@@ -187,7 +187,7 @@
           if (main) {
             main.querySelectorAll('.next-cta').forEach(el => el.remove());
             let pageMd = parseNode(main, pageUrl);
-            pageMd = pageMd.replace(/\n{3,}/g, '\n\n').trim();
+            pageMd = pageMd.replace(/\n\s*\n\s*\n+/g, '\n\n').trim();
             combinedMd += pageMd + '\n\n---\n\n';
           }
         } catch (e) {
@@ -208,7 +208,7 @@
         document.head.appendChild(s);
       });
     }
-    return window.marked.parse(md);
+    return window.marked.parse ? window.marked.parse(md) : window.marked(md);
   }
 
   async function buildBeautifiedHtml(onProgress, isPrint = false) {
