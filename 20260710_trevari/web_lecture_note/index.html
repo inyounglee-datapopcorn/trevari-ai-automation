@@ -24,7 +24,23 @@
       <main class="main">
         <div class="chapter-tag">트레바리 독서모임</div>
         <h1>내 일에 바로 써먹는 AI 자동화</h1>
-        <p class="lead">ChatGPT도, Claude도 써봤습니다. 그런데 막상 내 일에 가져와 붙이려 하면 어디서부터 손대야 할지 막막했을 거예요. 매일 반복되는 자잘한 일은 여전히 손으로 하나하나 처리하고 계실 거고요. 이 모임은 AI로 더 많은 일을 해내기가 아니라, <b>어떤 일은 자동화하고 어떤 일은 사람의 손에 남길지</b> 함께 선을 긋는 모임입니다.<br><br><span style="display:inline-flex; align-items:center; gap:6px; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; font-size: 14.5px; font-weight: 700; color: var(--text);">🙋‍♂️ 참여 인원: 총 17명 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(시작 전 최종 확정 예정)</span></span></p>
+        <p class="lead">ChatGPT도, Claude도 써봤습니다. 그런데 막상 내 일에 가져와 붙이려 하면 어디서부터 손대야 할지 막막했을 거예요. 매일 반복되는 자잘한 일은 여전히 손으로 하나하나 처리하고 계실 거고요. 이 모임은 AI로 더 많은 일을 해내기가 아니라, <b>어떤 일은 자동화하고 어떤 일은 사람의 손에 남길지</b> 함께 선을 긋는 모임입니다.<br><br><span id="stats-container" style="display:inline-flex; align-items:center; gap:6px; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; font-size: 14.5px; font-weight: 700; color: var(--text);">🙋‍♂️ 참여 인원: 총 17명 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(시작 전 최종 확정 예정)</span></span></p>
+
+        <!-- Feature 3: Keyword Cloud -->
+        <div class="keyword-cloud-container">
+          <div class="kw-header">☁️ 1회차 독후감 핫 키워드</div>
+          <div class="kw-cloud">
+            <span class="kw kw-huge">n8n 워크플로우</span>
+            <span class="kw kw-large">생산성</span>
+            <span class="kw kw-medium">반복 업무</span>
+            <span class="kw kw-large">API 연동</span>
+            <span class="kw kw-small">환각 현상</span>
+            <span class="kw kw-huge">자동화</span>
+            <span class="kw kw-medium">프롬프트 엔지니어링</span>
+            <span class="kw kw-small">웹훅(Webhook)</span>
+            <span class="kw kw-medium">막막함</span>
+          </div>
+        </div>
 
         <div class="grass-graph-container" id="grass-graph">
           <h3 style="margin-top:0;">멤버 활동 현황 (잔디밭)</h3>
@@ -78,6 +94,26 @@
               </div>
             </div>
           </div>
+          
+          <!-- Feature 1: AI Brainstormer -->
+          <div class="tool-card ai-solver-card" style="grid-column: 1 / -1; text-align: left;">
+            <div class="notes-header-flex">
+              <h3>🛠️ "나의 찌질한 업무" AI 해결소</h3>
+            </div>
+            <div class="ai-notes-grid">
+              <div class="ai-notes-col">
+                <div class="col-label">😩 귀찮은 반복 업무 입력</div>
+                <textarea id="solver-input" placeholder="예: 매일 아침 팀원들이 슬랙에 올린 업무일지를 하나하나 복사해서 엑셀에 붙여넣고 있어요..."></textarea>
+                <button class="action-btn primary full-width" onclick="solveWithOllama()">Ollama에게 아키텍처 설계 받기 🚀</button>
+              </div>
+              <div class="ai-notes-col">
+                <div class="col-label">💡 n8n 자동화 설계도</div>
+                <div id="solver-result" class="summary-result-box">
+                  <span style="color: var(--text-muted);">여기에 트리거 ➡️ 처리 ➡️ 출력 형태의 자동화 파이프라인 설계도가 나타납니다.</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <hr />
@@ -92,6 +128,8 @@
           .pf-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; flex: 1; }
           @media (max-width: 780px) { .pf-grid { grid-template-columns: 1fr; } }
         </style>
+
+
 
         <h3>시즌 목표</h3>
         <p class="pf-section-lead">시즌이 끝날 즈음, 우리 손에 남는 것들입니다.</p>
@@ -151,6 +189,19 @@
           .then(response => response.json())
           .then(data => {
             window.clubMembers = data.members;
+            
+            const totalMembers = data.members.length;
+            let submittedCount = 0;
+            if (data.reviews && data.reviews["2026-07-10"]) {
+              submittedCount = Object.keys(data.reviews["2026-07-10"]).length;
+            }
+            const rate = Math.round((submittedCount / totalMembers) * 100);
+            
+            const statsContainer = document.getElementById('stats-container');
+            if (statsContainer) {
+              statsContainer.innerHTML = `🙋‍♂️ 참여 인원: 총 ${totalMembers}명 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(시작 전 최종 확정 예정)</span> <span style="margin-left: 8px; padding: 4px 10px; border-radius: 6px; background: var(--accent-strong); color: white; font-size: 13.5px; box-shadow: var(--shadow-sm);">📝 1회차 독후감 제출율: ${rate}% (${submittedCount}/${totalMembers}명)</span>`;
+            }
+
             renderGraph(data);
           })
           .catch(error => {
@@ -476,6 +527,50 @@
             - 업무 자동화는 필수불가결한 요소임.<br>
             - n8n과 로컬 AI를 결합하면 보안과 비용 모두 잡을 수 있음.<br>
             - <strong>Next Action:</strong> Ollama 설치 및 llama3 모델 다운로드해 오기
+          `;
+        }
+      }
+
+      // Feature 1: AI Brainstormer Logic
+      async function solveWithOllama() {
+        const input = document.getElementById('solver-input').value;
+        const resultBox = document.getElementById('solver-result');
+        
+        if (!input.trim()) {
+          alert("귀찮은 업무를 먼저 입력해주세요!");
+          document.getElementById('solver-input').focus();
+          return;
+        }
+        
+        resultBox.innerHTML = '<span style="color: var(--accent-strong);">🦙 Ollama가 최적의 n8n 파이프라인을 설계하고 있습니다... ⏳</span>';
+        
+        try {
+          const response = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'llama3',
+              prompt: `너는 최고의 업무 자동화(n8n) 전문가야. 다음 사용자의 귀찮은 반복 업무를 보고, 어떻게 n8n이나 Zapier로 자동화할 수 있을지 '트리거(시작)', '처리(AI/필터 등)', '출력(최종 동작)' 3단계로 나누어 명확하게 아키텍처 설계도를 짜줘. 무조건 한국어로 친절하게 대답해.\n\n사용자 업무: ${input}`,
+              stream: false
+            })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            resultBox.innerHTML = `<strong>[n8n 자동화 아키텍처 제안]</strong><br><br>${data.response.replace(/\\n/g, '<br>')}`;
+          } else {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+        } catch (err) {
+          resultBox.innerHTML = `
+            <span style="color: #ef4444;">Ollama 연결 실패! (데모 설계도를 보여줍니다)</span>
+            <br><br>
+            <strong>[n8n 자동화 아키텍처 제안 (데모)]</strong><br><br>
+            ⚡ <strong>트리거:</strong> Slack (지정된 채널에 새로운 메시지 감지)<br>
+            🧠 <strong>처리:</strong> OpenAI (메시지 내용에서 업무 내용만 추출 및 요약)<br>
+            ✅ <strong>출력:</strong> Google Sheets / Notion (추출된 데이터를 새로운 행으로 적재)
+            <br><br>
+            <small style="color: var(--text-muted);">이러면 매일 복붙하는 시간을 0으로 만들 수 있어요! 🎉</small>
           `;
         }
       }
