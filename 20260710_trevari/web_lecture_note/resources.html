@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>모임 참고자료 — 트레바리</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+    <link rel="stylesheet" href="sidebar.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"></aside>
+      <main class="main">
+        <div class="chapter-tag">모임 참고자료</div>
+        <h1>도움이 되는 툴과 링크들</h1>
+        <p class="lead">AI 자동화를 구축하고 실습할 때, 막힐 때마다 꺼내볼 수 있는 유용한 링크와 참고 자료들을 한곳에 모아두었습니다.</p>
+
+        <hr />
+        
+        <h3>🛠️ 필수 자동화 툴</h3>
+        <div class="feature-grid" style="margin-bottom: 36px;">
+          <div class="feature-card">
+            <h4>n8n (엔에이트엔)</h4>
+            <p>우리가 이번 시즌 내내 사용할 메인 자동화 툴입니다. 드래그 앤 드롭으로 수많은 앱을 연결하고 나만의 워크플로우를 만듭니다.</p>
+            <a href="https://n8n.io" target="_blank" style="display:inline-block; margin-top:12px; font-size:14px; font-weight:bold;">n8n 바로가기 ↗</a>
+          </div>
+          <div class="feature-card">
+            <h4>Claude (클로드)</h4>
+            <p>로직이나 정규식 작성이 필요할 때, 한국어로 질문하면 가장 똑똑하게 대답해주는 든든한 조수입니다. (무료 버전으로도 충분합니다.)</p>
+            <a href="https://claude.ai" target="_blank" style="display:inline-block; margin-top:12px; font-size:14px; font-weight:bold;">Claude 바로가기 ↗</a>
+          </div>
+          <div class="feature-card">
+            <h4>ChatGPT</h4>
+            <p>클로드와 함께 가장 많이 활용되는 대화형 AI입니다. 텍스트 다듬기, 요약, 데이터 추출 등의 노드 작업에 자주 쓰입니다.</p>
+            <a href="https://chatgpt.com" target="_blank" style="display:inline-block; margin-top:12px; font-size:14px; font-weight:bold;">ChatGPT 바로가기 ↗</a>
+          </div>
+          <div class="feature-card">
+            <h4>Make.com</h4>
+            <p>n8n과 유사한 방식의 노코드 자동화 툴입니다. n8n 외에 다른 대안을 찾아보고 싶으실 때 참고하기 좋습니다.</p>
+            <a href="https://make.com" target="_blank" style="display:inline-block; margin-top:12px; font-size:14px; font-weight:bold;">Make 바로가기 ↗</a>
+          </div>
+        </div>
+
+        <h3>📚 함께 읽는 자료 요약</h3>
+        <style>
+          .pf-label { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin: 26px 0 12px; }
+          .pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin: 0 0 8px; }
+          .pf-card { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+          .pf-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+          .pf-badge { align-self: flex-start; font-size: 10.5px; font-weight: 800; letter-spacing: 0.04em; padding: 4px 10px; border-radius: 999px; background: var(--accent-bg); color: var(--accent-strong); }
+          .pf-name { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 2px; }
+          .pf-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; flex: 1; }
+          @media (max-width: 780px) { .pf-grid { grid-template-columns: 1fr; } }
+        </style>
+        <div class="pf-grid" style="margin-bottom: 36px;">
+          <a class="pf-card" href="ch01.html">
+            <span class="pf-badge">1회차 (7/10)</span>
+            <div class="pf-name">n8n이 다 해줌</div>
+            <div class="pf-desc">자동화의 공통 언어와 n8n의 기본 뼈대를 익힙니다.</div>
+          </a>
+          <a class="pf-card" href="ch02.html">
+            <span class="pf-badge">2회차 (8/14)</span>
+            <div class="pf-name">가짜 노동</div>
+            <div class="pf-desc">바쁘기만 하고 성과는 없는 가짜 노동을 덜어내는 법을 다룹니다.</div>
+          </a>
+          <a class="pf-card" href="ch03.html">
+            <span class="pf-badge">3회차 (9/11)</span>
+            <div class="pf-name">boil-the-ocean</div>
+            <div class="pf-desc">작고 가치 있는 첫 v1을 만드는 Y Combinator의 철학입니다.</div>
+          </a>
+          <a class="pf-card" href="ch04.html">
+            <span class="pf-badge">4회차 (10/9)</span>
+            <div class="pf-name">파타고니아, 파도가 칠 때는 서핑을</div>
+            <div class="pf-desc">효율을 넘어 나만의 진짜 일과 가치를 되찾는 질문을 던집니다.</div>
+          </a>
+        </div>
+
+        <h3>📝 워크플로우 설계 템플릿</h3>
+        <div class="key-callout">
+          <div class="kc-label">템플릿 다운로드</div>
+          <p>모임에서 사용할 <strong>'나만의 워크플로우 설계안'</strong> 양식입니다. 3회차와 4회차 실습 때 사용하며, 1~2회차에서 떠오른 아이디어를 자유롭게 메모하는 용도로도 좋습니다.</p>
+          <div style="margin-top: 16px; display: flex; gap: 10px;">
+            <button style="padding: 10px 18px; background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 6px;" onclick="alert('PDF 다운로드가 곧 준비됩니다.')">
+              📥 PDF 다운로드
+            </button>
+            <button style="padding: 10px 18px; background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 6px;" onclick="alert('Notion 템플릿 복제 링크가 곧 준비됩니다.')">
+              📝 노션 템플릿 복제
+            </button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+    <script src="sidebar.js" defer></script>
+  </body>
+</html>

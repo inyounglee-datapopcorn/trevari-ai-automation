@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>01. 자동화의 공통 언어 잡기 — 트레바리</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+    <link rel="stylesheet" href="sidebar.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"></aside>
+      <main class="main">
+        <div class="chapter-tag">1회차 (7/10 금)</div>
+        <h1>자동화의 공통 언어 잡기</h1>
+        <p class="lead">내 일을 '트리거 → 처리 → 출력 → 검토'로 쪼개봅니다. 이번 시즌 동안 자동화에 올릴 후보 업무 하나를 골라 마지막에 손에 쥐고 가는 것이 첫 목표입니다.</p>
+        
+        <hr />
+        
+        <h3>읽을거리</h3>
+        <div class="read-card" style="display: flex; gap: 24px; align-items: flex-start; padding: 24px; background: var(--bg-elev); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 36px; box-shadow: var(--shadow-sm);">
+          <img src="https://r29hmvkwcd.execute-api.ap-northeast-2.amazonaws.com/images/books/9791175790438" alt="n8n이 다 해줌" style="width: 140px; border-radius: 6px; border: 1px solid var(--border);" />
+          <div>
+            <h4 style="margin-top:0; font-size: 1.3rem;">n8n이 다 해줌</h4>
+            <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 12px;">저자: 이인영</p>
+            <p style="font-size: 1rem; line-height: 1.6; color: var(--text);">자동화를 이야기하려면 먼저 우리에게 공통 언어가 필요해요. 첫 모임에서 함께 읽을 『n8n이 다 해줌』이 그 출발점입니다. 비개발자도 n8n으로 데이터 수집, API 연동, AI Agent 워크플로우 자동화의 기본 구조를 이해할 수 있도록 쓴 입문서예요. 기능을 외우는 책이 아니라, 반복되는 업무를 작은 단계로 나누고 다시 연결하는 사고방식을 익히는 책입니다.</p>
+          </div>
+        </div>
+
+                <div class="summary" style="background: var(--bg-elev); border-radius: 12px; padding: 32px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 40px; margin-top: 40px;">
+          <h2 style="margin-top: 0; font-size: 24px; border-bottom: 2px solid var(--text); padding-bottom: 12px; margin-bottom: 24px;">클럽장 발제문</h2>
+          
+          <div style="display: grid; grid-template-columns: 100px 1fr; gap: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 24px;">
+            <div style="font-weight: 800; color: var(--text);">시간표</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14.5px; color: var(--text-soft);">
+              <div>[1] 19:40 오프닝 & 독후감 토크</div>
+              <div>[2] 20:10 북 토크 1</div>
+              <div>[3] 21:20 쉬는 시간</div>
+              <div>[4] 21:35 북 토크 2</div>
+              <div>[5] 23:00 마무리 발언</div>
+              <div>[6] 23:20 모임 끝!</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 100px 1fr; gap: 16px; margin-bottom: 12px;">
+            <div style="font-weight: 800; color: var(--text);">북토크</div>
+            <div>
+              <h4 style="margin-top: 0; font-size: 18px; color: var(--accent-strong);">BOOK TALK 1</h4>
+              <p style="font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 28px;">
+                책을 읽으며 가장 인상 깊었던 부분은 어디인가요? 비개발자로서 '자동화'라는 단어를 들었을 때 느꼈던 막막함이 책을 읽으며 어떻게 변했는지 자유롭게 나눠봅시다.
+              </p>
+
+              <h4 style="margin-top: 0; font-size: 18px; color: var(--accent-strong);">BOOK TALK 2</h4>
+              <p style="font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 28px;">
+                <strong>내 일에서 가장 자주 반복되는 업무 세 가지는 무엇인가요?</strong><br>이 업무들을 '트리거 → 처리 → 출력'의 구조로 분해한다면 어떻게 쪼갤 수 있을까요?
+              </p>
+
+              <h4 style="margin-top: 0; font-size: 18px; color: var(--accent-strong);">BOOK TALK 3</h4>
+              <p style="font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 28px;">
+                <strong>자동화할 일과 사람이 해야 할 일은 어떻게 구분할 수 있을까요?</strong><br>단순히 외주를 주는 것과, 내가 직접 자동화 시스템을 구축하는 것의 차이는 무엇이라고 생각하시나요?
+              </p>
+
+              <hr style="margin: 32px 0; border: none; border-top: 1px dashed var(--border-strong);">
+
+              <h4 style="margin-top: 0; font-size: 18px; color: var(--text);">마무리 토크</h4>
+              <ul style="font-size: 14.5px; color: var(--text-soft); line-height: 1.7; padding-left: 20px; margin-bottom: 0;">
+                <li>오늘 모임에서 머리가 띵! 했던 순간이 있다면?</li>
+                <li>다음 모임 전까지 꼭 해보고 싶은 첫 번째 액션 플랜 1가지</li>
+                <li>우리 다 같이 단체 사진 찍어볼까요? 📸</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3>이번 회차 체크리스트</h3>
+        <ul style="list-style-type: none; padding-left: 0; font-size: 1rem; line-height: 2.2;">
+          <li><label><input type="checkbox" style="accent-color: var(--accent); margin-right: 8px;"> n8n 회원가입 및 기본 환경 세팅 완료</label></li>
+          <li><label><input type="checkbox" style="accent-color: var(--accent); margin-right: 8px;"> 내 반복 업무 3가지 리스트업</label></li>
+          <li><label><input type="checkbox" style="accent-color: var(--accent); margin-right: 8px;"> 가장 먼저 자동화할 후보 1순위 선정</label></li>
+        </ul>
+
+        <div class="next-cta" style="margin-top: 40px;">
+          <div>
+            <div class="label">다음 회차 보기</div>
+            <div class="title">02 · '바쁘기만 한 일' 걷어내기</div>
+          </div>
+          <a href="ch02.html">다음 장으로 →</a>
+        </div>
+      </main>
+    </div>
+    <script src="sidebar.js" defer></script>
+  </body>
+</html>
