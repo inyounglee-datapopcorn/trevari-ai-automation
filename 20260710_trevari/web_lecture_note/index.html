@@ -67,53 +67,7 @@
             </div>
           </div>
           
-          <!-- AI Meeting Notes (n8n & Local AI) -->
-          <div class="tool-card ai-notes-card">
-            <div class="notes-header-flex">
-              <h3>🤖 실시간 회의록 (로컬 AI & n8n)</h3>
-              <div style="display: flex; gap: 8px;">
-                <input type="text" id="n8n-webhook-url" placeholder="n8n Webhook URL" class="webhook-input" />
-                <button class="action-btn outline" id="mic-btn" onclick="toggleMic()">🎤 마이크 켜기</button>
-              </div>
-            </div>
-            <div class="ai-notes-grid">
-              <div class="ai-notes-col">
-                <div class="col-label">🗣️ 원본 발언 (Real-time)</div>
-                <textarea id="raw-notes" placeholder="마이크를 켜면 맥북 로컬 엔진을 통해 실시간으로 발언이 기록됩니다..."></textarea>
-                <div style="display: flex; gap: 8px;">
-                  <button class="action-btn outline full-width" onclick="summarizeWithOllama()">🦙 Ollama 로컬 요약</button>
-                  <button class="action-btn primary full-width" onclick="summarizeWithN8n()">n8n 전송 & 요약 →</button>
-                </div>
-              </div>
-              <div class="ai-notes-col">
-                <div class="col-label">✨ AI 요약 결과</div>
-                <div id="ai-summary-result" class="summary-result-box">
-                  <span style="color: var(--text-muted);">요약 결과가 여기에 표시됩니다. (Ollama 또는 n8n)</span>
-                </div>
-                <button class="action-btn outline full-width" onclick="copySummary()">결과 복사하기</button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Feature 1: AI Brainstormer -->
-          <div class="tool-card ai-solver-card" style="grid-column: 1 / -1; text-align: left;">
-            <div class="notes-header-flex">
-              <h3>🛠️ "나의 찌질한 업무" AI 해결소</h3>
-            </div>
-            <div class="ai-notes-grid">
-              <div class="ai-notes-col">
-                <div class="col-label">😩 귀찮은 반복 업무 입력</div>
-                <textarea id="solver-input" placeholder="예: 매일 아침 팀원들이 슬랙에 올린 업무일지를 하나하나 복사해서 엑셀에 붙여넣고 있어요..."></textarea>
-                <button class="action-btn primary full-width" onclick="solveWithOllama()">Ollama에게 아키텍처 설계 받기 🚀</button>
-              </div>
-              <div class="ai-notes-col">
-                <div class="col-label">💡 n8n 자동화 설계도</div>
-                <div id="solver-result" class="summary-result-box">
-                  <span style="color: var(--text-muted);">여기에 트리거 ➡️ 처리 ➡️ 출력 형태의 자동화 파이프라인 설계도가 나타납니다.</span>
-                </div>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         <hr />
