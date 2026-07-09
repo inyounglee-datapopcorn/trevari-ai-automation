@@ -13,18 +13,7 @@
       <a class="top-nav-item" data-nav="resources" href="resources.html">
         <span class="ico">🛠️</span> 모임 참고자료
       </a>
-      <div class="dl-caption">전체 강의 자료 저장</div>
-      <div class="dl-row">
-        <button class="dl-btn" id="dl-all-html" type="button" title="HTML 문서로 저장">
-          <span class="ico">⬇</span> HTML
-        </button>
-        <button class="dl-btn" id="dl-all-pdf" type="button" title="PDF로 인쇄/저장">
-          <span class="ico">🖨</span> PDF
-        </button>
-        <button class="dl-btn" id="dl-all-md" type="button" title="마크다운 텍스트로 저장">
-          <span class="ico">📝</span> MD
-        </button>
-      </div>
+
     </div>
 
     <nav class="ch-nav">
@@ -101,200 +90,55 @@
     main.insertAdjacentHTML('beforeend', FOOTER_HTML);
   }
 
-  function collectPages() {
-    const seen = new Set(['index.html']);
-    const chapters = [];
-    const aux = [];
-    document.querySelectorAll('.top-nav a[data-nav][href$=".html"]').forEach(a => {
-      const url = a.getAttribute('href');
-      if (!url || seen.has(url)) return;
-      seen.add(url);
-      aux.push(url);
-    });
-    document.querySelectorAll('.ch-nav a[href$=".html"]').forEach(a => {
-      const url = a.getAttribute('href');
-      if (!url || seen.has(url)) return;
-      seen.add(url);
-      const block = a.closest('.ch-block');
-      const ch = block ? block.getAttribute('data-ch') : '';
-      (ch === 'index' || ch === 'resources') ? aux.push(url) : chapters.push(url);
-    });
-    return ['index.html'].concat(chapters, aux);
-  }
+  // 발제문 PDF 다운로드 버튼 동적 추가
+  const h2Tags = Array.from(document.querySelectorAll('h2'));
+  const baljeH2 = h2Tags.find(h2 => h2.textContent.includes('클럽장 발제문') || h2.textContent.includes('발제문'));
 
-  function buildCombinedMarkdown(onProgress) {
-    return new Promise(async (resolve) => {
-      const urls = collectPages();
-      const parser = new DOMParser();
-      let combinedMd = '# 내 일에 바로 써먹는 AI 자동화 - 전체 교안\n\n';
-
-      function parseNode(node, pageUrl) {
-        if (node.nodeType === 3) {
-          return node.textContent.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ');
-        }
-        if (node.nodeType !== 1) return '';
-        const tag = node.tagName.toLowerCase();
-        
-        if (tag === 'script' || tag === 'style' || tag === 'nav' || tag === 'button' || node.classList.contains('page-footer') || node.classList.contains('chapter-tag')) return '';
-        
-        let inner = '';
-        for (const child of Array.from(node.childNodes)) {
-          inner += parseNode(child, pageUrl);
-        }
-        
-        if (tag === 'h1') return '\n\n# ' + inner.trim() + '\n\n';
-        if (tag === 'h2') return '\n\n## ' + inner.trim() + '\n\n';
-        if (tag === 'h3') return '\n\n### ' + inner.trim() + '\n\n';
-        if (tag === 'h4') return '\n\n#### ' + inner.trim() + '\n\n';
-        if (tag === 'p') return '\n\n' + inner.trim() + '\n\n';
-        if (tag === 'li') return '\n- ' + inner.trim();
-        if (tag === 'ul' || tag === 'ol') return '\n' + inner + '\n';
-        if (tag === 'strong' || tag === 'b') return '**' + inner.trim() + '**';
-        if (tag === 'em' || tag === 'i') return '*' + inner.trim() + '*';
-        if (tag === 'a') {
-          let href = node.getAttribute('href');
-          if (href && !href.startsWith('#') && !href.startsWith('http')) {
-            href = new URL(href, pageUrl).href;
-          }
-          if (href) return '[' + inner.trim() + '](' + href + ')';
-          return inner;
-        }
-        if (tag === 'img') {
-          let src = node.getAttribute('src');
-          if (src && !src.startsWith('http') && !src.startsWith('data:')) {
-            src = new URL(src, pageUrl).href;
-          }
-          const alt = node.getAttribute('alt') || 'image';
-          return '\n![' + alt + '](' + src + ')\n';
-        }
-        if (tag === 'br') return '\n';
-        if (tag === 'hr') return '\n\n---\n\n';
-        
-        if (tag === 'div' || tag === 'section' || tag === 'article' || tag === 'main') {
-          return inner;
-        }
-        
-        return inner;
-      }
-
-      for (let i = 0; i < urls.length; i += 1) {
-        if (onProgress) onProgress(i + 1, urls.length);
-        try {
-          const pageUrl = new URL(urls[i], location.href).href;
-          const html = await (await fetch(urls[i])).text();
-          const doc = parser.parseFromString(html, 'text/html');
-          const main = doc.querySelector('.main');
-          if (main) {
-            main.querySelectorAll('.next-cta').forEach(el => el.remove());
-            let pageMd = parseNode(main, pageUrl);
-            pageMd = pageMd.replace(/\n\s*\n\s*\n+/g, '\n\n').trim();
-            combinedMd += pageMd + '\n\n---\n\n';
-          }
-        } catch (e) {
-          console.error('Failed to fetch', urls[i], e);
-        }
-      }
-      
-      resolve(combinedMd);
-    });
-  }
-
-  async function getMarkedHtml(md) {
-    if (typeof window.marked === 'undefined') {
-      await new Promise(r => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
-        s.onload = r;
-        document.head.appendChild(s);
-      });
-    }
-    return window.marked.parse ? window.marked.parse(md) : window.marked(md);
-  }
-
-  async function buildBeautifiedHtml(onProgress, isPrint = false) {
-    const md = await buildCombinedMarkdown(onProgress);
-    const bodyHtml = await getMarkedHtml(md);
+  if (baljeH2) {
+    baljeH2.style.display = 'flex';
+    baljeH2.style.justifyContent = 'space-between';
+    baljeH2.style.alignItems = 'center';
     
-    const printScript = isPrint ? "<script>setTimeout(() => { window.print(); }, 1000);</script>" : "";
-
-    return `<!DOCTYPE html>
+    const printBtn = document.createElement('button');
+    printBtn.innerHTML = '<span class="ico">🖨</span> 발제문 PDF 다운로드';
+    printBtn.style.cssText = 'font-size: 13px; font-weight: 600; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: auto;';
+    
+    printBtn.onmouseover = () => { printBtn.style.background = 'var(--bg-elev)'; };
+    printBtn.onmouseout = () => { printBtn.style.background = 'var(--bg-soft)'; };
+    
+    printBtn.onclick = () => {
+      const container = baljeH2.closest('.summary') || baljeH2.parentElement;
+      const clone = container.cloneNode(true);
+      const btnInClone = clone.querySelector('button');
+      if (btnInClone) btnInClone.remove(); // 출력물에서 버튼 제거
+      
+      const html = `<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>내 일에 바로 써먹는 AI 자동화 - 전체 교안</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css">
+  <title>클럽장 발제문</title>
   <style>
-    body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
-    @media (max-width: 767px) { body { padding: 15px; } }
-    @media print { body { padding: 0; max-width: none; } }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; padding: 40px; color: #333; max-width: 800px; margin: 0 auto; }
+    h2 { font-size: 24px; border-bottom: 2px solid #333; padding-bottom: 12px; margin-bottom: 24px; display: block !important; }
+    h4 { margin-top: 24px; font-size: 18px; color: #f97316; }
+    p { font-size: 15px; margin-bottom: 24px; }
+    ul { font-size: 14.5px; padding-left: 20px; }
   </style>
 </head>
-<body class="markdown-body">
-  ${bodyHtml}
-  <div style="margin-top: 50px; text-align: center; color: #888; font-size: 12px; border-top: 1px solid #eaecef; padding-top: 20px;">
+<body>
+  ${clone.innerHTML}
+  <div style="margin-top: 50px; text-align: center; color: #888; font-size: 12px; border-top: 1px solid #ccc; padding-top: 20px;">
     ⓒ 데이터팝콘(datapopcorn) · 독서모임 전용 학습 자료입니다. 무단 외부 반출·복제·재배포를 금합니다.
   </div>
-  ${printScript}
+  <script>setTimeout(() => { window.print(); }, 500);</script>
 </body>
 </html>`;
-  }
-
-  function withBusy(button, fn) {
-    return async function () {
-      const label = button.innerHTML;
-      button.disabled = true;
-      try {
-        await fn(progress => { button.innerHTML = '<span class="ico">⏳</span> ' + progress; });
-      } catch (e) {
-        alert('자료를 모으는 중 문제가 발생했습니다: ' + e.message);
-      } finally {
-        button.innerHTML = label;
-        button.disabled = false;
-      }
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const win = window.open(url, '_blank');
+      if (!win) alert('팝업이 차단되었습니다. 팝업 차단을 해제해주세요.');
     };
+    
+    baljeH2.appendChild(printBtn);
   }
-
-  const downloadMarkdown = async progress => {
-    const output = await buildCombinedMarkdown((i, n) => progress(i + '/' + n));
-    const blob = new Blob([output], { type: 'text/markdown;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'trevari_ai_automation_notes.md';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-  };
-  
-  const downloadHtml = async progress => {
-    const output = await buildBeautifiedHtml((i, n) => progress(i + '/' + n));
-    const blob = new Blob([output], { type: 'text/html;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'trevari_ai_automation_notes.html';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-  };
-
-  const printPdf = async progress => {
-    const output = await buildBeautifiedHtml((i, n) => progress(i + '/' + n), true);
-    const blob = new Blob([output], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const printWindow = window.open(url, '_blank');
-    if (!printWindow) {
-      alert('팝업이 차단되어 PDF 인쇄 창을 열 수 없습니다. HTML로 저장한 뒤 인쇄해주세요.');
-      downloadHtml(progress);
-    }
-  };
-
-  const htmlButton = document.getElementById('dl-all-html');
-  if (htmlButton) htmlButton.addEventListener('click', withBusy(htmlButton, downloadHtml));
-
-  const pdfButton = document.getElementById('dl-all-pdf');
-  if (pdfButton) pdfButton.addEventListener('click', withBusy(pdfButton, printPdf));
-
-  const mdButton = document.getElementById('dl-all-md');
-  if (mdButton) mdButton.addEventListener('click', withBusy(mdButton, downloadMarkdown));
 })();
