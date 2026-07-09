@@ -11,11 +11,22 @@
   <body>
     <!-- Modal for Review -->
     <div id="review-modal" class="modal-overlay" onclick="if(event.target === this) this.style.display='none'">
-      <div class="modal-content">
+      <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
         <button class="modal-close" onclick="document.getElementById('review-modal').style.display='none'">&times;</button>
         <h2 id="modal-member-name">멤버 이름</h2>
         <h3 id="modal-review-title">독후감 제목</h3>
         <p id="modal-review-content">독후감 내용</p>
+        
+        <hr style="margin: 24px 0; border: none; border-top: 1px dashed var(--border);">
+        <h4 style="margin: 0 0 8px; font-size: 15px; color: var(--accent-strong);">📝 내 워크플로우 설계 메모</h4>
+        <textarea id="modal-worksheet-input" rows="4" placeholder="이 멤버가 자동화하고 싶은 아이디어나 설계안을 요약 메모하세요." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard, sans-serif; font-size: 14px; color: var(--text); resize: vertical; box-sizing: border-box; margin-bottom: 16px;"></textarea>
+
+        <h4 style="margin: 0 0 8px; font-size: 15px; color: var(--accent-strong);">🗣️ 현장 발언 기록 (스크립트)</h4>
+        <textarea id="modal-speech-input" rows="4" placeholder="발표자가 현장에서 말한 내용을 메모하세요. (메인 화면의 STT 기록 연동)" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard, sans-serif; font-size: 14px; color: var(--text); resize: vertical; box-sizing: border-box;"></textarea>
+        
+        <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+          <button id="modal-worksheet-save-btn" style="padding: 8px 16px; background: var(--accent-strong); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: background 0.2s;">모두 저장하기</button>
+        </div>
       </div>
     </div>
     
@@ -50,9 +61,22 @@
         <div class="tools-grid">
           <!-- Random Picker -->
           <div class="tool-card picker-card">
-            <h3>🎲 발표자 추첨기</h3>
-            <div class="picker-display" id="picker-result">누구일까요?</div>
-            <button class="action-btn outline" onclick="pickRandomMember()">추첨하기</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="margin: 0;">🎲 발표자 추첨기</h3>
+              <select id="picker-session-select" onchange="if(typeof updateManualMemberSelect === 'function') updateManualMemberSelect()" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard; font-size: 13px; outline: none;">
+                <option value="2026-07-10">1회차</option>
+                <option value="2026-08-14">2회차</option>
+                <option value="2026-09-11">3회차</option>
+                <option value="2026-10-09">4회차</option>
+              </select>
+            </div>
+            <div class="picker-display" id="picker-result" style="margin-bottom: 8px; font-size: 24px;">발표자</div>
+            <select id="manual-member-select" style="width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 6px; border: 1px solid var(--border); font-family: Pretendard; font-size: 14px; text-align: center; background: var(--bg-soft); outline: none; cursor: pointer;" onchange="if(this.value){ document.getElementById('picker-result').textContent = this.value; document.getElementById('picker-result').style.color = 'var(--accent-strong)'; window.currentPickedMember = this.value; }">
+              <option value="">-- 혹은 직접 선택 --</option>
+            </select>
+            <div style="display: flex; gap: 8px;">
+              <button class="action-btn outline" style="flex: 1; padding: 12px; font-size: 15px;" onclick="pickRandomMember()">추첨하기</button>
+            </div>
           </div>
           
           <!-- Timer -->
@@ -65,10 +89,36 @@
               <button class="action-btn primary" id="timer-toggle-btn" onclick="toggleTimer()">시작</button>
               <button class="action-btn danger" onclick="resetTimer()">리셋</button>
             </div>
+            <div id="timer-logs" style="margin-top: 16px; font-size: 13px; color: var(--text); max-height: 120px; overflow-y: auto; text-align: left; padding: 12px; background: var(--bg-soft); border-radius: 8px; border: 1px solid var(--border);">
+              <em style="color: var(--text-muted);">타이머를 시작하고 멈출 때마다 이곳에 자동으로 누적 기록됩니다.</em>
+            </div>
           </div>
           
 
         </div>
+
+        <div class="tool-card" style="margin-top: 16px; padding: 20px; background: var(--bg-elev); border-radius: 12px; border: 1px solid var(--border);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 style="margin: 0;">🌟 모임 전체 내용 요약 리포트 (OpenAI API)</h3>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="password" id="openai-api-key" placeholder="sk-..." style="padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 13px; width: 140px; background: var(--bg-soft); outline: none;" onchange="localStorage.setItem('openai_api_key', this.value)">
+              <button class="action-btn outline" style="border-color: #8b5cf6; color: #8b5cf6;" onclick="summarizeMeetingWithOpenAI()">✨ 전체 요약하기</button>
+            </div>
+          </div>
+          <div id="meeting-summary-result" style="width: 100%; min-height: 100px; padding: 16px; border-radius: 8px; border: 1px solid var(--border); font-family: Pretendard; font-size: 14.5px; background: var(--bg-soft); color: var(--text); line-height: 1.6;">
+            <em style="color: var(--text-muted);">'전체 요약하기' 버튼을 누르면 오늘 각 멤버들이 작성한 워크플로우 설계 아이디어를 모두 모아, OpenAI GPT-4o-mini 모델이 아주 깔끔한 회의록으로 정리해 줍니다.<br><br>※ 우측 상단에 OpenAI API 키를 입력해 주세요. (입력된 키는 브라우저에 안전하게 자동 저장됩니다)</em>
+          </div>
+          <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+            <button class="action-btn outline" onclick="copyMeetingSummary()">📋 결과 복사하기</button>
+          </div>
+        </div>
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const savedKey = localStorage.getItem('openai_api_key');
+            if (savedKey) document.getElementById('openai-api-key').value = savedKey;
+          });
+        </script>
+
 
         <hr />
 
@@ -143,6 +193,8 @@
           .then(response => response.json())
           .then(data => {
             window.clubMembers = data.members;
+            window.clubData = data;
+            if (typeof updateManualMemberSelect === 'function') updateManualMemberSelect();
             
             const totalMembers = data.members.length;
             let submittedCount = 0;
@@ -220,6 +272,24 @@
                 document.getElementById('modal-member-name').textContent = `${member} 님의 ${sess.label} 독후감`;
                 document.getElementById('modal-review-title').textContent = reviewData.title;
                 document.getElementById('modal-review-content').textContent = reviewData.content;
+                
+                const worksheetKey = `worksheet_${sess.id}_${member}`;
+                
+                const textarea = document.getElementById('modal-worksheet-input');
+                textarea.value = localStorage.getItem(worksheetKey) || '';
+                
+                const saveBtn = document.getElementById('modal-worksheet-save-btn');
+                saveBtn.onclick = () => {
+                  localStorage.setItem(worksheetKey, textarea.value);
+                  const originalText = "모두 저장하기";
+                  saveBtn.textContent = '✅ 저장되었습니다';
+                  saveBtn.style.background = '#10b981';
+                  setTimeout(() => {
+                    saveBtn.textContent = originalText;
+                    saveBtn.style.background = 'var(--accent-strong)';
+                  }, 2000);
+                };
+
                 document.getElementById('review-modal').style.display = 'flex';
               };
             }
@@ -236,42 +306,79 @@
       
       // Random Picker
       let pickerInterval;
+
+      function updateManualMemberSelect() {
+        if (!window.clubData || !window.clubData.reviews) return;
+        const sessionSelect = document.getElementById('picker-session-select');
+        const manualSelect = document.getElementById('manual-member-select');
+        const sessionId = sessionSelect.value;
+        const sessionReviews = window.clubData.reviews[sessionId] || {};
+        const submittedMembers = Object.keys(sessionReviews);
+        
+        // Clear options except first
+        manualSelect.innerHTML = '<option value="">-- 혹은 직접 선택 --</option>';
+        
+        submittedMembers.forEach(member => {
+          const opt = document.createElement('option');
+          opt.value = member;
+          opt.textContent = member;
+          manualSelect.appendChild(opt);
+        });
+      }
+
       function pickRandomMember() {
-        const members = window.clubMembers || [];
-        if (members.length === 0) return;
+        if (!window.clubData || !window.clubData.reviews) {
+          alert("데이터를 불러오는 중입니다...");
+          return;
+        }
+        
+        const sessionSelect = document.getElementById('picker-session-select');
+        const sessionId = sessionSelect.value;
+        const sessionReviews = window.clubData.reviews[sessionId] || {};
+        const submittedMembers = Object.keys(sessionReviews);
+        
+        if (submittedMembers.length === 0) {
+          alert("이 회차에는 아직 독후감을 제출한 멤버가 없습니다.");
+          return;
+        }
         
         const display = document.getElementById('picker-result');
-        const btn = document.querySelector('.picker-card .action-btn');
-        btn.disabled = true;
+        const btns = document.querySelectorAll('.picker-card .action-btn');
+        if(btns[0]) btns[0].disabled = true;
         
         let ticks = 0;
         clearInterval(pickerInterval);
         display.style.color = 'var(--text)';
         
         pickerInterval = setInterval(() => {
-          const randomName = members[Math.floor(Math.random() * members.length)];
+          const randomName = submittedMembers[Math.floor(Math.random() * submittedMembers.length)];
           display.textContent = randomName;
           display.style.transform = 'scale(1.05)';
           setTimeout(() => display.style.transform = 'scale(1)', 50);
           
           ticks++;
-          if (ticks > 25) {
+          if (ticks > 20) {
             clearInterval(pickerInterval);
-            const winner = members[Math.floor(Math.random() * members.length)];
+            const winner = submittedMembers[Math.floor(Math.random() * submittedMembers.length)];
             display.textContent = `🎉 ${winner} 🎉`;
             display.style.color = 'var(--accent-strong)';
             display.style.transform = 'scale(1.15)';
             setTimeout(() => display.style.transform = 'scale(1)', 300);
-            btn.disabled = false;
+            if(btns[0]) btns[0].disabled = false;
+            window.currentPickedMember = winner;
+            
+            const manualSelect = document.getElementById('manual-member-select');
+            if (manualSelect) manualSelect.value = winner;
           }
         }, 50);
       }
 
       // Timer
       let timerInterval;
-      let timeLeft = 180;
+      window.timeLeft = 180; let timeLeft = 180;
       let timerRunning = false;
-      let totalTime = 180;
+      window.totalTime = 180; let totalTime = 180;
+      let lastStartedTime = 180;
 
       function updateTimerDisplay() {
         const display = document.getElementById('timer-display');
@@ -290,9 +397,13 @@
 
       function setTimer(seconds) {
         clearInterval(timerInterval);
+        if (timerRunning) {
+          recordSessionTime();
+        }
         timerRunning = false;
-        timeLeft = seconds;
-        totalTime = seconds;
+        timeLeft = seconds; window.timeLeft = seconds;
+        totalTime = seconds; window.totalTime = seconds;
+        lastStartedTime = seconds;
         document.getElementById('timer-toggle-btn').textContent = '시작';
         updateTimerDisplay();
       }
@@ -303,20 +414,55 @@
           clearInterval(timerInterval);
           timerRunning = false;
           btn.textContent = '계속';
+          recordSessionTime();
         } else {
           if (timeLeft === 0) setTimer(totalTime);
+          lastStartedTime = timeLeft;
           timerRunning = true;
           btn.textContent = '일시정지';
           timerInterval = setInterval(() => {
-            timeLeft--;
+            timeLeft--; window.timeLeft = timeLeft;
             updateTimerDisplay();
             if (timeLeft <= 0) {
               clearInterval(timerInterval);
               timerRunning = false;
               btn.textContent = '종료';
+              recordSessionTime();
             }
           }, 1000);
         }
+      }
+      
+      function recordSessionTime() {
+          const spent = lastStartedTime - timeLeft;
+          if (spent > 0) {
+              const logs = document.getElementById('timer-logs');
+              if (!logs) return;
+              
+              // Remove placeholder if exists
+              const em = logs.querySelector('em');
+              if (em) em.remove();
+              
+              const speaker = window.currentPickedMember || "익명";
+              const m = Math.floor(spent / 60).toString().padStart(2, '0');
+              const s = (spent % 60).toString().padStart(2, '0');
+              
+              if(!window.accumulatedTime) window.accumulatedTime = {};
+              window.accumulatedTime[speaker] = (window.accumulatedTime[speaker] || 0) + spent;
+              const acc = window.accumulatedTime[speaker];
+              const am = Math.floor(acc / 60).toString().padStart(2, '0');
+              const as = (acc % 60).toString().padStart(2, '0');
+              
+              const p = document.createElement('div');
+              p.style.marginBottom = "6px";
+              p.style.paddingBottom = "6px";
+              p.style.borderBottom = "1px solid var(--border)";
+              p.style.fontSize = "13.5px";
+              p.innerHTML = `<strong style="color: var(--accent-strong);">${speaker}</strong>: <span style="font-weight:bold;">${m}분 ${s}초</span> 발언 <span style="color:var(--text-muted)">(총 누적 ${am}분 ${as}초)</span>`;
+              logs.prepend(p);
+              
+              lastStartedTime = timeLeft;
+          }
       }
 
       function resetTimer() {
@@ -386,6 +532,26 @@
         });
       }
       
+
+        const sessionSelect = document.getElementById('picker-session-select');
+        const sessionId = sessionSelect.value;
+        const textNode = document.getElementById('raw-notes');
+        const text = textNode.value.trim();
+        
+        if (!text) {
+          alert("저장할 발언 내용이 없습니다.");
+          return;
+        }
+        
+        const speechKey = `speech_${sessionId}_${window.currentPickedMember}`;
+        const existing = localStorage.getItem(speechKey) || "";
+        const combined = existing ? existing + "\n\n---\n" + text : text;
+        
+        localStorage.setItem(speechKey, combined);
+        alert(`${window.currentPickedMember} 님의 현장 발언 스크립트에 추가되었습니다!\n\n(해당 멤버의 독후감 팝업에서 확인 가능합니다)`);
+        textNode.value = ''; // clear
+      }
+
       // Web Speech API (Local Dictation on Mac)
       let recognition;
       let isRecording = false;
@@ -393,11 +559,11 @@
       if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'ko-KR';
+        whisperPreviewRecognition.continuous = true;
+        whisperPreviewRecognition.interimResults = true;
+        whisperPreviewRecognition.lang = 'ko-KR';
 
-        recognition.onresult = (event) => {
+        whisperPreviewRecognition.onresult = (event) => {
           let finalTranscript = '';
           for (let i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
@@ -529,5 +695,96 @@
         }
       }
     </script>
-  </body>
+  
+        <script>
+              try { whisperPreviewRecognition.start(); } catch(e) {}
+            }
+            
+            // --- Audio Chunking for Whisper ---
+            window.whisperMediaRecorder.ondataavailable = e => {
+              if (e.data.size > 0) window.whisperAudioChunks.push(e.data);
+            };
+            
+            window.whisperMediaRecorder.onstop = async () => {
+              cancelAnimationFrame(drawVisual);
+              canvas.style.display = 'none';
+              stream.getTracks().forEach(track => track.stop());
+              if(whisperPreviewRecognition) whisperPreviewRecognition.stop();
+              
+              textarea.placeholder = "🤖 OpenAI Whisper API로 음성 변환 중... (약 2~5초 소요)";
+              btn.innerHTML = '⏳ Whisper API 변환 중...';
+              btn.disabled = true;
+              btn.classList.remove('danger');
+              
+              try {
+                const apiKey = document.getElementById('openai-api-key') ? document.getElementById('openai-api-key').value.trim() : localStorage.getItem('openai_api_key');
+                if (!apiKey) {
+                  throw new Error("화면 아래쪽 [모임 전체 내용 요약 리포트] 박스에 OpenAI API 키를 입력해주세요!");
+                }
+                
+                const blob = new Blob(window.whisperAudioChunks, { type: 'audio/webm' });
+                const formData = new FormData();
+                
+                formData.append('file', blob, 'audio.webm');
+                formData.append('model', 'whisper-1');
+                formData.append('language', 'ko');
+                
+                const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                  },
+                  body: formData
+                });
+                
+                if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(errorData.error?.message || "OpenAI API 에러");
+                }
+                
+                const result = await response.json();
+                
+                if(result.text && result.text.trim() !== '') {
+                  textarea.value = result.text.trim();
+                }
+                textarea.placeholder = "변환이 완료되었습니다.";
+              } catch (err) {
+                console.error(err);
+                if (textarea.value.trim() === '') {
+                  textarea.value = "Whisper 변환 실패: " + err.message + " (임시 스크립트가 유지됩니다.)";
+                } else {
+                  alert("Whisper 변환 실패: " + err.message);
+                }
+              } finally {
+                btn.innerHTML = '🎤 녹음 시작';
+                btn.disabled = false;
+                btn.classList.add('outline');
+              }
+            };
+            
+            window.whisperMediaRecorder.start();
+            window.isWhisperRecording = true;
+            btn.innerHTML = '🛑 녹음 완료 & 고품질 변환';
+            btn.classList.remove('outline');
+            btn.classList.add('danger');
+            textarea.placeholder = "🔴 녹음 중입니다... (말씀을 마치면 '녹음 완료'를 눌러주세요)";
+            textarea.value = '';
+            
+          } catch (err) {
+            alert("마이크 권한을 허용해주세요!");
+            console.error(err);
+          }
+        } else {
+          window.whisperMediaRecorder.stop();
+          window.isWhisperRecording = false;
+        }
+        } catch(topLevelErr) {
+          alert("버튼 동작 에러: " + topLevelErr.message);
+          console.error(topLevelErr);
+        }
+      };
+    </script>
+
+
+</body>
 </html>

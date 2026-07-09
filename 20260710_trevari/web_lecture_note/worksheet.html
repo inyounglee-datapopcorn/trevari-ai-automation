@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>업무 프로세스 순서도 워크시트 — 트레바리</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+    <link rel="stylesheet" href="sidebar.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* 워크시트 전용 스타일 추가 */
+      
+    :root {
+      --paper: #ffffff;
+      --bg-soft: #f6f8fb;
+      --ink: #172033;
+      --text: #42526b;
+      --muted: #7a879a;
+      --line: #dde5ef;
+      --navy: #043b72;
+      --orange: #f58220;
+      --orange-soft: #fde6d2;
+      --blue-soft: #eaf1f8;
+      --green: #1e9e68;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body.worksheet-body {
+      margin: 0;
+      background: #e9edf3;
+      color: var(--ink);
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+      line-height: 1.45;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 16px auto;
+      padding: 14mm 14mm 12mm;
+      background: var(--paper);
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    .top-rule {
+      width: 36mm;
+      height: 2mm;
+      background: var(--orange);
+      margin-bottom: 6mm;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--navy);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .page h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .page h2 {
+      margin: 0 0 10px;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .page h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .page p {
+      margin: 0;
+      color: var(--text);
+      font-size: 11px;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      max-width: 158mm;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .section {
+      margin-top: 8mm;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 8mm;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: #ffffff;
+    }
+
+    .card.soft {
+      background: var(--bg-soft);
+    }
+
+    .note-list {
+      margin: 6px 0 0;
+      padding-left: 16px;
+      color: var(--text);
+      font-size: 10px;
+    }
+
+    .note-list li {
+      margin: 3px 0;
+    }
+
+    .callout {
+      margin-top: 8px;
+      padding: 9px 10px;
+      border-left: 3px solid var(--orange);
+      background: #fff8f1;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .worksheet-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6mm;
+      margin-top: 6mm;
+    }
+
+    .blank-card {
+      min-height: 22mm;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 9px;
+      background: #ffffff;
+    }
+
+    .blank-card.large {
+      min-height: 32mm;
+    }
+
+    .blank-title {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .write-line {
+      height: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .write-line + .write-line {
+      margin-top: 5px;
+    }
+
+    .footer {
+      position: absolute;
+      left: 14mm;
+      right: 14mm;
+      bottom: 8mm;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 5px;
+      color: var(--muted);
+      font-size: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 7px;
+      font-size: 10px;
+    }
+
+    .table th {
+      padding: 7px 8px;
+      background: var(--navy);
+      color: #ffffff;
+      text-align: left;
+      font-weight: 800;
+    }
+
+    .table td {
+      height: 30px;
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      vertical-align: top;
+      color: var(--text);
+    }
+
+    .prompt-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfcfe;
+      color: var(--text);
+      font-size: 8.5px;
+      white-space: pre-wrap;
+      font-family: "SFMono-Regular", "Consolas", monospace;
+      line-height: 1.35;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .svg-title {
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+      fill: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .svg-node {
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+      fill: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .svg-sub {
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+      fill: var(--text);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .svg-tag {
+      font-family: "SFMono-Regular", "Consolas", monospace;
+      fill: var(--muted);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+    }
+
+    .svg-label {
+      font-family: "SFMono-Regular", "Consolas", monospace;
+      fill: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      body.worksheet-body {
+        background: #ffffff;
+      }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+  
+      
+      /* 기존 레이아웃과 충돌 방지 */
+      .page {
+        box-shadow: var(--shadow-sm);
+        border-radius: 8px;
+      }
+      @media print {
+        .sidebar, .ch-header, .page-footer, .no-print { display: none !important; }
+        body { background: white !important; margin: 0 !important; padding: 0 !important; }
+        .main { padding: 0 !important; margin: 0 !important; background: white !important; }
+        .page { 
+            box-shadow: none !important; 
+            margin: 0 !important; 
+            padding: 5mm !important; /* 최소 여백 */
+            border-radius: 0 !important; 
+            width: 100% !important; 
+            min-height: auto !important; 
+            height: 100vh !important; 
+            overflow: hidden !important; 
+            page-break-after: avoid !important;
+        }
+        /* 줄이기 */
+        .title { font-size: 20px !important; margin-bottom: 12px !important; }
+        .section-title { font-size: 15px !important; margin-bottom: 8px !important; padding-bottom: 4px !important; }
+        .form-label { font-size: 12px !important; margin-bottom: 2px !important; }
+        .form-input, .form-textarea { padding: 4px 8px !important; font-size: 12px !important; margin-bottom: 6px !important; }
+        .form-textarea { min-height: 40px !important; }
+        .btn, button { display: none !important; }
+        .section { margin-bottom: 16px !important; }
+      }
+        .main { padding: 0 !important; margin: 0 !important; background: white !important; }
+        .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"></aside>
+      <main class="main">
+        <div class="chapter-tag">워크시트</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h1 style="margin-bottom: 0;">업무 프로세스 순서도 워크시트</h1>
+          <button onclick="window.print()" class="no-print" style="font-size: 13px; font-weight: 600; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" onmouseover="this.style.background='var(--bg-elev)'" onmouseout="this.style.background='var(--bg-soft)'">
+            <span class="ico">🖨</span> 워크시트 PDF 다운로드
+          </button>
+        </div>
+        <section class="page">
+    <div class="top-rule"></div>
+    <p class="eyebrow">TREVARI · AI AUTOMATION · WORKSHEET</p>
+    <h1>내 업무 프로세스를 순서도로 그려보기</h1>
+    <p class="subtitle">오늘은 각자 반복 업무 하나를 골라 손으로 순서도를 그리고, 그 순서도를 바탕으로 AI가 따라 할 수 있는 Skill.md 초안을 만듭니다.</p>
+    <div class="meta">
+      <span class="tag">1. 업무 고르기</span>
+      <span class="tag">2. 순서도 그리기</span>
+      <span class="tag">3. AI/사람 단계 구분</span>
+      <span class="tag">4. Skill.md로 변환</span>
+    </div>
+
+    <div class="section two-col">
+      <div>
+        <h2>완성 예시</h2>
+        <p>아래 예시는 "안전보건 뉴스 클리핑" 업무를 순서도로 표현한 것입니다. 본인 업무도 같은 방식으로 시작 조건, 입력자료, AI 처리, 사람 검증, 결과물을 나눠보세요.</p>
+      </div>
+      <div class="card soft">
+        <h3>순서도에 꼭 들어갈 5가지</h3>
+        <ul class="note-list">
+          <li>업무가 시작되는 조건</li>
+          <li>AI가 읽어야 하는 입력자료</li>
+          <li>AI가 초안을 만들 수 있는 단계</li>
+          <li>사람이 검증하거나 승인해야 하는 단계</li>
+          <li>최종 결과물과 다음 액션</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <svg viewBox="0 0 760 640" role="img" aria-label="안전보건 뉴스 클리핑 업무 순서도 예시">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#42526b"></polygon>
+          </marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#f58220"></polygon>
+          </marker>
+        </defs>
+
+        <rect x="0" y="0" width="760" height="640" fill="#ffffff"></rect>
+
+        <line x1="380" y1="72" x2="380" y2="112" stroke="#42526b" stroke-width="1.2" marker-end="url(#arrow)"></line>
+        <line x1="380" y1="184" x2="380" y2="224" stroke="#42526b" stroke-width="1.2" marker-end="url(#arrow)"></line>
+        <line x1="380" y1="296" x2="380" y2="344" stroke="#f58220" stroke-width="1.4" marker-end="url(#arrow-accent)"></line>
+        <line x1="380" y1="448" x2="380" y2="488" stroke="#42526b" stroke-width="1.2" marker-end="url(#arrow)"></line>
+        <line x1="380" y1="560" x2="380" y2="592" stroke="#42526b" stroke-width="1.2" marker-end="url(#arrow)"></line>
+
+        <line x1="456" y1="396" x2="604" y2="396" stroke="#42526b" stroke-width="1.2" marker-end="url(#arrow)"></line>
+        <line x1="604" y1="396" x2="604" y2="264" stroke="#42526b" stroke-width="1.2"></line>
+        <line x1="604" y1="264" x2="504" y2="264" stroke="#42526b" stroke-width="1.2" marker-end="url(#arrow)"></line>
+
+        <rect x="352" y="320" width="56" height="16" rx="3" fill="#ffffff"></rect>
+        <text x="380" y="332" class="svg-label" text-anchor="middle">초안</text>
+        <rect x="520" y="382" width="36" height="16" rx="3" fill="#ffffff"></rect>
+        <text x="538" y="394" class="svg-label" text-anchor="middle">수정</text>
+
+        <rect x="276" y="24" width="208" height="48" rx="24" fill="#eaf1f8" stroke="#043b72" stroke-width="1.2"></rect>
+        <text x="380" y="44" class="svg-node" text-anchor="middle">업무 시작</text>
+        <text x="380" y="60" class="svg-sub" text-anchor="middle">매주 월요일 뉴스 정리</text>
+
+        <rect x="248" y="112" width="264" height="72" rx="8" fill="#ffffff" stroke="#043b72" stroke-width="1.2"></rect>
+        <rect x="260" y="124" width="42" height="16" rx="3" fill="#ffffff" stroke="#7a879a" stroke-width="0.8"></rect>
+        <text x="281" y="136" class="svg-tag" text-anchor="middle">자료</text>
+        <text x="380" y="148" class="svg-node" text-anchor="middle">입력자료 확인</text>
+        <text x="380" y="166" class="svg-sub" text-anchor="middle">검색 키워드 · 기간 · 이전 뉴스레터</text>
+
+        <rect x="236" y="224" width="288" height="72" rx="8" fill="#fff3ea" stroke="#f58220" stroke-width="1.6"></rect>
+        <rect x="248" y="236" width="34" height="16" rx="3" fill="#fff3ea" stroke="#f58220" stroke-width="0.8"></rect>
+        <text x="265" y="248" class="svg-tag" text-anchor="middle" fill="#f58220">AI</text>
+        <text x="380" y="260" class="svg-node" text-anchor="middle">AI 초안 작성</text>
+        <text x="380" y="278" class="svg-sub" text-anchor="middle">기사 후보 수집 · 중복 제거 · 3줄 요약</text>
+
+        <polygon points="380,344 456,396 380,448 304,396" fill="#ffffff" stroke="#172033" stroke-width="1.2"></polygon>
+        <text x="380" y="392" class="svg-node" text-anchor="middle">검증 OK?</text>
+        <text x="380" y="410" class="svg-sub" text-anchor="middle">출처 · 날짜 · 관련성</text>
+
+        <rect x="484" y="232" width="240" height="64" rx="8" fill="#ffffff" stroke="#7a879a" stroke-width="1.2" stroke-dasharray="5,4"></rect>
+        <rect x="496" y="244" width="42" height="16" rx="3" fill="#ffffff" stroke="#7a879a" stroke-width="0.8"></rect>
+        <text x="517" y="256" class="svg-tag" text-anchor="middle">사람</text>
+        <text x="604" y="264" class="svg-node" text-anchor="middle">검색 조건 수정</text>
+        <text x="604" y="282" class="svg-sub" text-anchor="middle">키워드 · 제외 조건 보완</text>
+
+        <rect x="248" y="488" width="264" height="72" rx="8" fill="#ffffff" stroke="#043b72" stroke-width="1.2"></rect>
+        <rect x="260" y="500" width="42" height="16" rx="3" fill="#ffffff" stroke="#7a879a" stroke-width="0.8"></rect>
+        <text x="281" y="512" class="svg-tag" text-anchor="middle">결과</text>
+        <text x="380" y="524" class="svg-node" text-anchor="middle">뉴스레터 초안</text>
+        <text x="380" y="542" class="svg-sub" text-anchor="middle">제목 · 링크 · 요약 · 업무 시사점</text>
+
+        <rect x="276" y="592" width="208" height="40" rx="20" fill="#eaf1f8" stroke="#043b72" stroke-width="1.2"></rect>
+        <text x="380" y="616" class="svg-node" text-anchor="middle">사람 승인 후 공유</text>
+
+      </svg>
+    </div>
+
+    <div class="callout">순서도를 그릴 때는 "AI가 어디까지 초안을 만들고, 사람이 어디서 검증/승인하는가"를 반드시 표시합니다.</div>
+
+    <div class="footer">
+      <span>업무 프로세스 순서도 워크시트</span>
+      <span>1 / 3</span>
+    </div>
+  </section>
+<section class="page">
+    <div class="top-rule"></div>
+    <p class="eyebrow">WORKSHEET · DRAW YOUR PROCESS</p>
+    <h1>내 업무 순서도 직접 그리기</h1>
+    <p class="subtitle">아래 빈 공간에 본인 업무 순서도를 손으로 그려보세요. 예쁘게 그리는 것이 아니라, AI에게 맡길 수 있는 단계와 사람이 책임질 단계를 구분하는 것이 목적입니다.</p>
+
+    <div class="section">
+      <svg viewBox="0 0 760 620" role="img" aria-label="업무 프로세스 순서도 직접 그리기용 빈 공간">
+        <defs>
+          <pattern id="draw-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#dde5ef" stroke-width="0.8" opacity="0.55"></path>
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="760" height="620" fill="#ffffff"></rect>
+
+        <rect x="28" y="24" width="216" height="52" rx="8" fill="#ffffff" stroke="#dde5ef" stroke-width="1.2"></rect>
+        <text x="44" y="46" class="svg-tag">업무명</text>
+        <line x1="44" y1="62" x2="224" y2="62" stroke="#dde5ef" stroke-width="1"></line>
+
+        <rect x="272" y="24" width="216" height="52" rx="8" fill="#ffffff" stroke="#dde5ef" stroke-width="1.2"></rect>
+        <text x="288" y="46" class="svg-tag">시작 조건</text>
+        <line x1="288" y1="62" x2="468" y2="62" stroke="#dde5ef" stroke-width="1"></line>
+
+        <rect x="516" y="24" width="216" height="52" rx="8" fill="#ffffff" stroke="#dde5ef" stroke-width="1.2"></rect>
+        <text x="532" y="46" class="svg-tag">최종 결과물</text>
+        <line x1="532" y1="62" x2="712" y2="62" stroke="#dde5ef" stroke-width="1"></line>
+
+        <rect x="28" y="104" width="704" height="408" rx="8" fill="url(#draw-grid)" stroke="#043b72" stroke-width="1.4"></rect>
+        <text x="52" y="132" class="svg-tag">순서도 그리는 공간</text>
+        <text x="380" y="312" class="svg-sub" text-anchor="middle" opacity="0.35">여기에 본인 업무 흐름을 자유롭게 그려보세요</text>
+
+        <rect x="28" y="536" width="704" height="56" rx="8" fill="#f6f8fb" stroke="#dde5ef" stroke-width="1"></rect>
+        <text x="52" y="560" class="svg-node">라벨 붙이기</text>
+        <text x="176" y="560" class="svg-sub">[사람] 직접 판단</text>
+        <text x="300" y="560" class="svg-sub">[AI] 초안 작성</text>
+        <text x="412" y="560" class="svg-sub">[자료] 읽을 파일</text>
+        <text x="532" y="560" class="svg-sub">[검증] 확인 필요</text>
+        <text x="176" y="584" class="svg-sub">[승인] 발송/제출 전 멈춤</text>
+        <text x="380" y="584" class="svg-sub">[출력] 보고서, 표, 메일, PPT 목차</text>
+      </svg>
+    </div>
+
+    <div class="section two-col">
+      <div class="card">
+        <h3>그릴 때 던질 질문</h3>
+        <ul class="note-list">
+          <li>이 업무는 어떤 상황에서 시작되나요?</li>
+          <li>AI가 읽어야 할 자료는 무엇인가요?</li>
+          <li>사람이 꼭 판단해야 하는 기준은 무엇인가요?</li>
+          <li>숫자, 날짜, 출처, 법규, 계약 중 무엇을 검증해야 하나요?</li>
+          <li>최종 결과물은 어떤 형태로 남나요?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>주의할 점</h3>
+        <ul class="note-list">
+          <li>처음부터 전체 자동화를 그리지 않습니다.</li>
+          <li>작은 반복 업무 하나만 고릅니다.</li>
+          <li>민감자료는 원문 대신 비식별 샘플로 표시합니다.</li>
+          <li>발송, 제출, 삭제, 결제는 사람 승인 단계로 둡니다.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>업무 프로세스 순서도 워크시트</span>
+      <span>2 / 3</span>
+    </div>
+  </section>
+<section class="page">
+    <div class="top-rule"></div>
+    <p class="eyebrow">WORKSHEET · CONVERT TO SKILL.MD</p>
+    <h1>순서도를 Skill.md로 바꾸기</h1>
+    <p class="subtitle">방금 그린 순서도를 아래 표에 옮기면 Skill.md의 기본 뼈대가 됩니다. 빈칸을 채운 뒤 AI에게 초안 작성을 요청하세요.</p>
+
+    <div class="section">
+      <h2>1. 업무 정보</h2>
+      <div class="worksheet-grid">
+        <div class="blank-card">
+          <p class="blank-title">업무명</p>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="blank-card">
+          <p class="blank-title">반복 주기</p>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="blank-card large">
+          <p class="blank-title">이 업무를 하는 이유</p>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="blank-card large">
+          <p class="blank-title">최종 결과물</p>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>2. 순서도에서 Skill.md로 옮기기</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 28%;">Skill.md 항목</th>
+            <th>내 업무 내용</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>읽어야 할 자료</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>읽으면 안 되는 자료</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>AI가 처리할 단계</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>사람이 검증할 단계</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>사람 승인이 필요한 단계</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>검증 기준</td>
+            <td>숫자 / 날짜 / 출처 / 법규 / 계약 / 개인정보 / 고유명사</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section two-col">
+      <div>
+        <h2>3. AI에게 요청할 문장</h2>
+        <div class="prompt-box">아래 업무 프로세스를 바탕으로 Skill.md 초안을 작성해줘.
+
+조건:
+- name은 영어 소문자와 하이픈으로 작성
+- 입력자료, 작업 절차, 출력 형식, 검증 기준, 주의사항을 포함
+- 개인정보, 내부자료, 계약/법규/숫자 검증 기준을 반드시 포함
+- 외부 발송, 제출, 삭제는 사람 승인 전에는 하지 않도록 명시
+- 마지막에 실행 테스트 프롬프트 1개도 작성
+
+업무명:
+순서도 내용:
+입력자료:
+AI가 처리할 단계:
+사람이 검증할 단계:
+결과물:
+검증 기준:</div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <span>업무 프로세스 순서도 워크시트</span>
+      <span>3 / 3</span>
+    </div>
+  </section>
+      </main>
+    </div>
+    <script src="sidebar.js" defer></script>
+  </body>
+</html>

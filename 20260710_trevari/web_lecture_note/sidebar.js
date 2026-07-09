@@ -91,23 +91,24 @@
   }
 
   // 발제문 PDF 다운로드 버튼 동적 추가
-  const h2Tags = Array.from(document.querySelectorAll('h2'));
-  const baljeH2 = h2Tags.find(h2 => h2.textContent.includes('클럽장 발제문') || h2.textContent.includes('발제문'));
+  const baljeContainer = document.querySelector('.trevari-doc .td-header') || Array.from(document.querySelectorAll('h2')).find(h2 => h2.textContent.includes('클럽장 발제문') || h2.textContent.includes('발제문'));
 
-  if (baljeH2) {
-    baljeH2.style.display = 'flex';
-    baljeH2.style.justifyContent = 'space-between';
-    baljeH2.style.alignItems = 'center';
+  if (baljeContainer) {
+    if (baljeContainer.tagName === 'H2') {
+      baljeContainer.style.display = 'flex';
+      baljeContainer.style.justifyContent = 'space-between';
+      baljeContainer.style.alignItems = 'center';
+    }
     
     const printBtn = document.createElement('button');
     printBtn.innerHTML = '<span class="ico">🖨</span> 발제문 PDF 다운로드';
-    printBtn.style.cssText = 'font-size: 13px; font-weight: 600; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: auto;';
+    printBtn.style.cssText = 'font-size: 13px; font-weight: 600; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: 16px; margin-bottom: 4px;';
     
     printBtn.onmouseover = () => { printBtn.style.background = 'var(--bg-elev)'; };
     printBtn.onmouseout = () => { printBtn.style.background = 'var(--bg-soft)'; };
     
     printBtn.onclick = () => {
-      const container = baljeH2.closest('.summary') || baljeH2.parentElement;
+      const container = baljeContainer.closest('.summary') || baljeContainer.parentElement;
       const clone = container.cloneNode(true);
       const btnInClone = clone.querySelector('button');
       if (btnInClone) btnInClone.remove(); // 출력물에서 버튼 제거
@@ -118,16 +119,46 @@
   <meta charset="UTF-8">
   <title>클럽장 발제문</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; padding: 40px; color: #333; max-width: 800px; margin: 0 auto; }
-    h2 { font-size: 24px; border-bottom: 2px solid #333; padding-bottom: 12px; margin-bottom: 24px; display: block !important; }
-    h4 { margin-top: 24px; font-size: 18px; color: #f97316; }
-    p { font-size: 15px; margin-bottom: 24px; }
-    ul { font-size: 14.5px; padding-left: 20px; }
+    :root {
+      --text: #111;
+      --text-soft: #333;
+      --text-muted: #555;
+      --border: #ddd;
+      --border-strong: #999;
+      --bg-elev: #fff;
+      --bg-soft: #f4f4f5;
+      --accent-strong: #ea580c;
+      --accent-bg: #fff7ed;
+      --shadow-sm: none;
+    }
+    @page { margin: 10mm; size: A4 portrait; }
+    body { font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; line-height: 1.35; padding: 0; color: var(--text); max-width: 100%; margin: 0; font-size: 11px; background: white; }
+    
+    /* 여백 꾹꾹 눌러담기: 새 발제문 양식(.trevari-doc) 전용 오버라이드 */
+    .trevari-doc { padding: 0 !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
+    .td-header { padding: 10px 0 !important; margin-bottom: 16px !important; border-top-width: 3px !important; }
+    .td-title { font-size: 20px !important; }
+    .td-date { font-size: 12px !important; }
+    
+    .td-grid { grid-template-columns: 80px 1fr !important; column-gap: 16px !important; }
+    .td-label { font-size: 13px !important; padding: 8px 0 !important; }
+    .td-value { font-size: 13px !important; padding: 8px 0 !important; }
+    
+    .td-time-grid { column-gap: 16px !important; }
+    .td-time-item { padding: 4px 0 !important; font-size: 12px !important; }
+    
+    .td-main-label { font-size: 14px !important; padding: 12px 0 !important; }
+    .td-main-content { padding: 12px 0 !important; }
+    .td-main-content h3 { font-size: 16px !important; margin: 0 0 12px 0 !important; }
+    .td-question { font-size: 11.5px !important; margin-bottom: 14px !important; line-height: 1.4 !important; }
+    .td-question strong { margin-bottom: 4px !important; font-size: 12px !important; }
+    
+    .td-accent { display: none !important; }
   </style>
 </head>
 <body>
   ${clone.innerHTML}
-  <div style="margin-top: 50px; text-align: center; color: #888; font-size: 12px; border-top: 1px solid #ccc; padding-top: 20px;">
+  <div style="margin-top: 16px; text-align: center; color: #888; font-size: 9px; border-top: 1px solid #ddd; padding-top: 8px;">
     ⓒ 데이터팝콘(datapopcorn) · 독서모임 전용 학습 자료입니다. 무단 외부 반출·복제·재배포를 금합니다.
   </div>
   <script>setTimeout(() => { window.print(); }, 500);</script>
@@ -139,6 +170,6 @@
       if (!win) alert('팝업이 차단되었습니다. 팝업 차단을 해제해주세요.');
     };
     
-    baljeH2.appendChild(printBtn);
+    baljeContainer.appendChild(printBtn);
   }
 })();
