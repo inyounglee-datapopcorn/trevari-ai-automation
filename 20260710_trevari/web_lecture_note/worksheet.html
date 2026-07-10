@@ -321,31 +321,15 @@
         border-radius: 8px;
       }
       @media print {
-        .sidebar, .ch-header, .page-footer, .no-print { display: none !important; }
-        body { background: white !important; margin: 0 !important; padding: 0 !important; }
-        .main { padding: 0 !important; margin: 0 !important; background: white !important; }
-        .page { 
-            box-shadow: none !important; 
-            margin: 0 !important; 
-            padding: 5mm !important; /* 최소 여백 */
-            border-radius: 0 !important; 
-            width: 100% !important; 
-            min-height: auto !important; 
-            height: 100vh !important; 
-            overflow: hidden !important; 
-            page-break-after: avoid !important;
+        .sidebar, .ch-header, .page-footer, .no-print, button { display: none !important; }
+        body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
+        .layout { display: block !important; max-width: none !important; min-height: 0 !important; }
+        .main { max-width: none !important; padding: 0 !important; margin: 0 !important; background: #ffffff !important; }
+        .page {
+          box-shadow: none !important;
+          border-radius: 0 !important;
+          margin: 0 auto !important;
         }
-        /* 줄이기 */
-        .title { font-size: 20px !important; margin-bottom: 12px !important; }
-        .section-title { font-size: 15px !important; margin-bottom: 8px !important; padding-bottom: 4px !important; }
-        .form-label { font-size: 12px !important; margin-bottom: 2px !important; }
-        .form-input, .form-textarea { padding: 4px 8px !important; font-size: 12px !important; margin-bottom: 6px !important; }
-        .form-textarea { min-height: 40px !important; }
-        .btn, button { display: none !important; }
-        .section { margin-bottom: 16px !important; }
-      }
-        .main { padding: 0 !important; margin: 0 !important; background: white !important; }
-        .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; }
       }
     </style>
   </head>
@@ -353,8 +337,8 @@
     <div class="layout">
       <aside class="sidebar" id="sidebar"></aside>
       <main class="main">
-        <div class="chapter-tag">워크시트</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div class="chapter-tag no-print">워크시트</div>
+        <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
           <h1 style="margin-bottom: 0;">업무 프로세스 순서도 워크시트</h1>
           <button onclick="window.print()" class="no-print" style="font-size: 13px; font-weight: 600; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" onmouseover="this.style.background='var(--bg-elev)'" onmouseout="this.style.background='var(--bg-soft)'">
             <span class="ico">🖨</span> 워크시트 PDF 다운로드
