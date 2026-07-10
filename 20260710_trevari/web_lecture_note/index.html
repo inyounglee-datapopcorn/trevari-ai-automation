@@ -105,6 +105,9 @@
           .postit-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; margin-bottom: 6px; color: #4b5563; padding-right: 14px; }
           .postit-head strong { font-weight: 800; color: #111827; }
           .postit-body { word-break: break-word; white-space: pre-wrap; }
+          .postit-list { margin: 0; padding-left: 16px; }
+          .postit-list li { margin-bottom: 4px; }
+          .postit-list li:last-child { margin-bottom: 0; }
           .postit-del { position: absolute; top: 4px; right: 6px; border: none; background: none; cursor: pointer; font-size: 15px; color: rgba(0,0,0,0.35); padding: 0 2px; display: none; line-height: 1; }
           .postit:hover .postit-del { display: block; }
         </style>
@@ -566,7 +569,19 @@
 
           const body = document.createElement('div');
           body.className = 'postit-body';
-          body.textContent = note.summary;
+          const lines = note.summary.split('\n').map(l => l.replace(/^[-•]\s*/, '').trim()).filter(Boolean);
+          if (lines.length > 1) {
+            const ul = document.createElement('ul');
+            ul.className = 'postit-list';
+            lines.forEach(line => {
+              const li = document.createElement('li');
+              li.textContent = line;
+              ul.appendChild(li);
+            });
+            body.appendChild(ul);
+          } else {
+            body.textContent = note.summary;
+          }
 
           if (note.raw && note.raw !== note.summary) el.title = `원문: ${note.raw}`;
 
@@ -609,7 +624,7 @@
             body: JSON.stringify({
               model: 'gpt-4o-mini',
               messages: [
-                { role: 'system', content: '너는 독서모임 서기야. 방금 끝난 발언을 한국어로 4~5문장 정도로 요약해. 핵심 논지, 근거나 예시, 결론을 담아 발언자의 관점이 잘 드러나도록 쓰고, 인사말이나 군더더기는 빼. 요약 문장만 출력하고 다른 말은 절대 덧붙이지 마.' },
+                { role: 'system', content: '너는 독서모임 서기야. 방금 끝난 발언을 한국어 불렛포인트 3~4개로 요약해. 각 줄은 "- "로 시작하고 한 줄에 한 문장, 핵심만 짧게 담아. 첫 줄엔 핵심 논지, 다음 줄들엔 근거·예시·결론처럼 구체적인 내용을 담아 발언자의 관점이 잘 드러나게 해. 인사말이나 군더더기는 빼고, 불렛 목록만 출력하고 다른 말은 절대 덧붙이지 마.' },
                 { role: 'user', content: raw }
               ],
               temperature: 0.3
