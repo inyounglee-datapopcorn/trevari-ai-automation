@@ -592,28 +592,39 @@
         btn.disabled = true;
         btn.textContent = '⏳ AI 요약 중...';
 
-        let summary = raw;
         const apiKey = (document.getElementById('openai-api-key')?.value || '').trim();
-        if (apiKey) {
-          try {
-            const res = await fetch('https://api.openai.com/v1/chat/completions', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-              body: JSON.stringify({
-                model: 'gpt-4o-mini',
-                messages: [
-                  { role: 'system', content: '너는 독서모임 서기야. 방금 끝난 발언을 한국어로 최대 2문장, 핵심만 남겨 요약해. 발언자의 관점을 유지하고 인사말이나 군더더기는 빼.' },
-                  { role: 'user', content: raw }
-                ],
-                temperature: 0.3
-              })
-            });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            summary = data.choices?.[0]?.message?.content?.trim() || raw;
-          } catch (err) {
-            console.error('OpenAI 요약 실패, 원문 그대로 사용:', err);
+        if (!apiKey) {
+          alert('AI 요약을 사용하려면 아래 [모임 전체 내용 요약 리포트] 박스에 OpenAI API 키를 먼저 입력해주세요.\n(입력만 해두면 이 포스트잇 요약에도 자동으로 사용됩니다)');
+          btn.disabled = false;
+          btn.textContent = '✂️ 발언 끝! 요약해서 붙이기';
+          document.getElementById('openai-api-key')?.focus();
+          return;
+        }
+
+        let summary;
+        try {
+          const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                { role: 'system', content: '너는 독서모임 서기야. 방금 끝난 발언을 한국어로 최대 2문장, 핵심만 남겨 요약해. 발언자의 관점을 유지하고 인사말이나 군더더기는 빼. 요약 문장만 출력하고 다른 말은 절대 덧붙이지 마.' },
+                { role: 'user', content: raw }
+              ],
+              temperature: 0.3
+            })
+          });
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `HTTP ${res.status}`);
           }
+          const data = await res.json();
+          summary = data.choices?.[0]?.message?.content?.trim();
+          if (!summary) throw new Error('빈 응답을 받았습니다.');
+        } catch (err) {
+          console.error('OpenAI 요약 실패:', err);
+          summary = `⚠️ AI 요약 실패 (${err.message}) — 원문: ${raw}`;
         }
 
         const sessionId = currentSessionId();
