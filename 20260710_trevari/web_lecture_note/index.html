@@ -63,7 +63,7 @@
           <div class="tool-card picker-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
               <h3 style="margin: 0;">🎲 발표자 추첨기</h3>
-              <select id="picker-session-select" onchange="if(typeof updateManualMemberSelect === 'function') updateManualMemberSelect()" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard; font-size: 13px; outline: none;">
+              <select id="picker-session-select" onchange="if(typeof updateManualMemberSelect === 'function') updateManualMemberSelect(); if(typeof renderPostits === 'function') renderPostits();" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard; font-size: 13px; outline: none;">
                 <option value="2026-07-10">1회차</option>
                 <option value="2026-08-14">2회차</option>
                 <option value="2026-09-11">3회차</option>
@@ -71,7 +71,7 @@
               </select>
             </div>
             <div class="picker-display" id="picker-result" style="margin-bottom: 8px; font-size: 24px;">발표자</div>
-            <select id="manual-member-select" style="width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 6px; border: 1px solid var(--border); font-family: Pretendard; font-size: 14px; text-align: center; background: var(--bg-soft); outline: none; cursor: pointer;" onchange="if(this.value){ document.getElementById('picker-result').textContent = this.value; document.getElementById('picker-result').style.color = 'var(--accent-strong)'; window.currentPickedMember = this.value; }">
+            <select id="manual-member-select" style="width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 6px; border: 1px solid var(--border); font-family: Pretendard; font-size: 14px; text-align: center; background: var(--bg-soft); outline: none; cursor: pointer;" onchange="if(this.value){ document.getElementById('picker-result').textContent = this.value; document.getElementById('picker-result').style.color = 'var(--accent-strong)'; window.currentPickedMember = this.value; var ps = document.getElementById('postit-speaker'); if(ps) ps.value = this.value; }">
               <option value="">-- 혹은 직접 선택 --</option>
             </select>
             <div style="display: flex; gap: 8px;">
@@ -95,6 +95,33 @@
           </div>
           
 
+        </div>
+
+        <!-- 발언 AI 요약 포스트잇 -->
+        <style>
+          .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 16px; }
+          .postit { position: relative; padding: 14px; border-radius: 4px; box-shadow: 2px 3px 8px rgba(0,0,0,0.12); transform: rotate(var(--tilt, 0deg)); font-size: 13.5px; line-height: 1.5; color: #1f2937; transition: transform 0.15s; }
+          .postit:hover { transform: rotate(0deg) scale(1.03); z-index: 2; }
+          .postit-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; margin-bottom: 6px; color: #4b5563; padding-right: 14px; }
+          .postit-head strong { font-weight: 800; color: #111827; }
+          .postit-body { word-break: break-word; white-space: pre-wrap; }
+          .postit-del { position: absolute; top: 4px; right: 6px; border: none; background: none; cursor: pointer; font-size: 15px; color: rgba(0,0,0,0.35); padding: 0 2px; display: none; line-height: 1; }
+          .postit:hover .postit-del { display: block; }
+        </style>
+        <div class="tool-card" style="margin-top: 16px; padding: 20px; background: var(--bg-elev); border-radius: 12px; border: 1px solid var(--border);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 8px;">
+            <h3 style="margin: 0;">🗒️ 발언 AI 요약 포스트잇</h3>
+            <select id="postit-speaker" style="padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard; font-size: 13px; outline: none; cursor: pointer;">
+              <option value="">발언자 선택 (추첨 시 자동)</option>
+            </select>
+          </div>
+          <p style="margin: 0 0 12px; font-size: 13px; color: var(--text-muted);">발언이 끝날 때마다 요약해서 붙여두면, 누가 어떤 이야기를 했는지 흐름을 놓치지 않습니다. 🎤 버튼으로 실시간 받아쓰기를 켜거나 직접 입력하세요. (AI 요약에는 아래 요약 리포트 박스의 OpenAI API 키를 사용하며, 키가 없으면 원문 그대로 붙습니다)</p>
+          <textarea id="speech-input" rows="3" placeholder="발언 내용을 입력하거나 🎤 녹음 시작을 눌러 실시간으로 받아쓰세요." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard, sans-serif; font-size: 14px; color: var(--text); resize: vertical; box-sizing: border-box;"></textarea>
+          <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px;">
+            <button id="speech-mic-btn" class="action-btn outline" onclick="toggleSpeechMic()">🎤 녹음 시작</button>
+            <button id="postit-add-btn" class="action-btn primary" onclick="addSpeechPostit()">✂️ 발언 끝! 요약해서 붙이기</button>
+          </div>
+          <div id="postit-wall" class="postit-wall"></div>
         </div>
 
         <div class="tool-card" style="margin-top: 16px; padding: 20px; background: var(--bg-elev); border-radius: 12px; border: 1px solid var(--border);">
@@ -208,6 +235,17 @@
               statsContainer.innerHTML = `🙋‍♂️ 참여 인원: 총 ${totalMembers}명 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(시작 전 최종 확정 예정)</span> <span style="margin-left: 8px; padding: 4px 10px; border-radius: 6px; background: var(--accent-strong); color: white; font-size: 13.5px; box-shadow: var(--shadow-sm);">📝 1회차 독후감 제출율: ${rate}% (${submittedCount}/${totalMembers}명)</span>`;
             }
 
+            const speakerSelect = document.getElementById('postit-speaker');
+            if (speakerSelect) {
+              data.members.slice().sort((a, b) => a.localeCompare(b, 'ko')).forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                speakerSelect.appendChild(opt);
+              });
+            }
+            renderPostits();
+
             renderGraph(data);
           })
           .catch(error => {
@@ -274,13 +312,17 @@
                 document.getElementById('modal-review-content').textContent = reviewData.content;
                 
                 const worksheetKey = `worksheet_${sess.id}_${member}`;
-                
+                const speechKey = `speech_${sess.id}_${member}`;
+
                 const textarea = document.getElementById('modal-worksheet-input');
                 textarea.value = localStorage.getItem(worksheetKey) || '';
-                
+                const speechTextarea = document.getElementById('modal-speech-input');
+                speechTextarea.value = localStorage.getItem(speechKey) || '';
+
                 const saveBtn = document.getElementById('modal-worksheet-save-btn');
                 saveBtn.onclick = () => {
                   localStorage.setItem(worksheetKey, textarea.value);
+                  localStorage.setItem(speechKey, speechTextarea.value);
                   const originalText = "모두 저장하기";
                   saveBtn.textContent = '✅ 저장되었습니다';
                   saveBtn.style.background = '#10b981';
@@ -369,6 +411,8 @@
             
             const manualSelect = document.getElementById('manual-member-select');
             if (manualSelect) manualSelect.value = winner;
+            const speakerSelect = document.getElementById('postit-speaker');
+            if (speakerSelect) speakerSelect.value = winner;
           }
         }, 50);
       }
@@ -468,102 +512,138 @@
       function resetTimer() {
         setTimer(totalTime);
       }
-      
-      // AI Notes & n8n
-      document.addEventListener('DOMContentLoaded', () => {
-        const savedUrl = localStorage.getItem('n8nWebhookUrl');
-        if (savedUrl) {
-          document.getElementById('n8n-webhook-url').value = savedUrl;
-        }
-      });
 
-      async function summarizeWithN8n() {
-        const urlInput = document.getElementById('n8n-webhook-url');
-        const rawText = document.getElementById('raw-notes').value;
-        const resultBox = document.getElementById('ai-summary-result');
-        
-        const url = urlInput.value.trim();
-        if (url) localStorage.setItem('n8nWebhookUrl', url);
-        
-        if (!url) {
-          alert("n8n Webhook URL을 입력해주세요. (실습에서 만든 워크플로우 URL)");
-          urlInput.focus();
-          return;
-        }
-        if (!rawText.trim()) {
-          alert("요약할 원본 발언을 입력해주세요.");
-          document.getElementById('raw-notes').focus();
-          return;
-        }
-        
-        resultBox.innerHTML = '<span style="color: var(--accent-strong);">n8n 워크플로우로 데이터를 전송 중입니다... ⏳</span>';
-        
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: rawText })
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            resultBox.textContent = data.summary || data.text || JSON.stringify(data, null, 2);
-          } else {
-            throw new Error(`HTTP Error: ${response.status}`);
-          }
-        } catch (err) {
-          resultBox.innerHTML = `
-            <span style="color: #ef4444;">웹훅 호출 실패! (CORS 에러이거나 URL이 잘못되었습니다)</span>
-            <br><br>
-            <small style="color: var(--text-muted);">※ n8n 웹훅 노드 설정에서 'Respond to Webhook' 옵션과 CORS 설정을 확인하세요.<br>※ 현재는 데모용 가짜 요약 결과를 출력합니다.</small>
-            <br><br>
-            <strong>[데모 요약 결과]</strong><br>
-            - 오늘 모임의 주요 안건: 업무 자동화의 필요성과 n8n 실습<br>
-            - 다수결 의견: 생각보다 API 연동이 까다롭지만 효과적임<br>
-            - <strong>Next Action:</strong> 다음 주까지 각자 API Key 1개씩 발급해오기
-          `;
-        }
+      // ===== 발언 AI 요약 포스트잇 =====
+      const POSTIT_COLORS = ['#fef3c7', '#dbeafe', '#dcfce7', '#fce7f3', '#ede9fe', '#ffedd5'];
+
+      function currentSessionId() {
+        return document.getElementById('picker-session-select').value;
       }
 
-      function copySummary() {
-        const text = document.getElementById('ai-summary-result').innerText;
-        navigator.clipboard.writeText(text).then(() => {
-          alert("요약 결과가 복사되었습니다!");
+      function getPostits(sessionId) {
+        try { return JSON.parse(localStorage.getItem(`postits_${sessionId}`)) || []; }
+        catch (e) { return []; }
+      }
+
+      function savePostits(sessionId, notes) {
+        localStorage.setItem(`postits_${sessionId}`, JSON.stringify(notes));
+      }
+
+      function renderPostits() {
+        const wall = document.getElementById('postit-wall');
+        if (!wall) return;
+        const notes = getPostits(currentSessionId());
+        wall.innerHTML = '';
+        if (notes.length === 0) {
+          wall.innerHTML = '<em style="color: var(--text-muted); font-size: 13.5px; grid-column: 1 / -1;">아직 붙은 포스트잇이 없습니다. 발언이 끝나면 요약해서 붙여보세요!</em>';
+          return;
+        }
+        notes.forEach((note, idx) => {
+          const el = document.createElement('div');
+          el.className = 'postit';
+          el.style.background = POSTIT_COLORS[idx % POSTIT_COLORS.length];
+          el.style.setProperty('--tilt', `${((idx % 5) - 2) * 1.2}deg`);
+
+          const del = document.createElement('button');
+          del.className = 'postit-del';
+          del.title = '삭제';
+          del.innerHTML = '&times;';
+          del.onclick = () => {
+            const cur = getPostits(currentSessionId());
+            cur.splice(idx, 1);
+            savePostits(currentSessionId(), cur);
+            renderPostits();
+          };
+
+          const head = document.createElement('div');
+          head.className = 'postit-head';
+          const nameEl = document.createElement('strong');
+          nameEl.textContent = note.member;
+          const timeEl = document.createElement('span');
+          timeEl.textContent = note.time;
+          head.appendChild(nameEl);
+          head.appendChild(timeEl);
+
+          const body = document.createElement('div');
+          body.className = 'postit-body';
+          body.textContent = note.summary;
+
+          if (note.raw && note.raw !== note.summary) el.title = `원문: ${note.raw}`;
+
+          el.appendChild(del);
+          el.appendChild(head);
+          el.appendChild(body);
+          wall.appendChild(el);
         });
       }
-      
 
-        const sessionSelect = document.getElementById('picker-session-select');
-        const sessionId = sessionSelect.value;
-        const textNode = document.getElementById('raw-notes');
-        const text = textNode.value.trim();
-        
-        if (!text) {
-          alert("저장할 발언 내용이 없습니다.");
+      async function addSpeechPostit() {
+        const input = document.getElementById('speech-input');
+        const btn = document.getElementById('postit-add-btn');
+        const member = document.getElementById('postit-speaker').value || window.currentPickedMember || '익명';
+        const raw = input.value.trim();
+        if (!raw) {
+          alert('요약할 발언 내용을 먼저 입력하거나 🎤 녹음해주세요.');
+          input.focus();
           return;
         }
-        
-        const speechKey = `speech_${sessionId}_${window.currentPickedMember}`;
-        const existing = localStorage.getItem(speechKey) || "";
-        const combined = existing ? existing + "\n\n---\n" + text : text;
-        
-        localStorage.setItem(speechKey, combined);
-        alert(`${window.currentPickedMember} 님의 현장 발언 스크립트에 추가되었습니다!\n\n(해당 멤버의 독후감 팝업에서 확인 가능합니다)`);
-        textNode.value = ''; // clear
+        if (isRecording) toggleSpeechMic();
+
+        btn.disabled = true;
+        btn.textContent = '⏳ AI 요약 중...';
+
+        let summary = raw;
+        const apiKey = (document.getElementById('openai-api-key')?.value || '').trim();
+        if (apiKey) {
+          try {
+            const res = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+              body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [
+                  { role: 'system', content: '너는 독서모임 서기야. 방금 끝난 발언을 한국어로 최대 2문장, 핵심만 남겨 요약해. 발언자의 관점을 유지하고 인사말이나 군더더기는 빼.' },
+                  { role: 'user', content: raw }
+                ],
+                temperature: 0.3
+              })
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            summary = data.choices?.[0]?.message?.content?.trim() || raw;
+          } catch (err) {
+            console.error('OpenAI 요약 실패, 원문 그대로 사용:', err);
+          }
+        }
+
+        const sessionId = currentSessionId();
+        const notes = getPostits(sessionId);
+        const now = new Date();
+        const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        notes.unshift({ member, time, summary, raw });
+        savePostits(sessionId, notes);
+
+        // 해당 멤버 독후감 팝업의 '현장 발언 기록'에도 누적
+        const speechKey = `speech_${sessionId}_${member}`;
+        const existing = localStorage.getItem(speechKey) || '';
+        localStorage.setItem(speechKey, existing ? existing + '\n\n---\n' + raw : raw);
+
+        input.value = '';
+        btn.disabled = false;
+        btn.textContent = '✂️ 발언 끝! 요약해서 붙이기';
+        renderPostits();
       }
 
-      // Web Speech API (Local Dictation on Mac)
-      let recognition;
+      // Web Speech API 실시간 받아쓰기 (Chrome 권장)
+      let recognition = null;
       let isRecording = false;
-
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        whisperPreviewRecognition.continuous = true;
-        whisperPreviewRecognition.interimResults = true;
-        whisperPreviewRecognition.lang = 'ko-KR';
-
-        whisperPreviewRecognition.onresult = (event) => {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SR) {
+        recognition = new SR();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'ko-KR';
+        recognition.onresult = (event) => {
           let finalTranscript = '';
           for (let i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
@@ -571,219 +651,96 @@
             }
           }
           if (finalTranscript) {
-            const rawNotes = document.getElementById('raw-notes');
-            rawNotes.value += finalTranscript;
-            rawNotes.scrollTop = rawNotes.scrollHeight;
+            const input = document.getElementById('speech-input');
+            input.value += finalTranscript;
+            input.scrollTop = input.scrollHeight;
           }
         };
-
-        recognition.onerror = (event) => {
-          console.error("Speech recognition error", event.error);
-        };
+        recognition.onerror = (event) => console.error('Speech recognition error', event.error);
+        // 크롬이 중간에 인식을 끊어도 녹음 중이면 자동 재시작
+        recognition.onend = () => { if (isRecording) { try { recognition.start(); } catch (e) {} } };
       }
 
-      function toggleMic() {
+      function toggleSpeechMic() {
         if (!recognition) {
-          alert("현재 브라우저에서는 실시간 음성 인식을 지원하지 않습니다. (Chrome 또는 Safari 권장)");
+          alert('현재 브라우저에서는 실시간 음성 인식을 지원하지 않습니다. (Chrome 권장)');
           return;
         }
-        const btn = document.getElementById('mic-btn');
+        const btn = document.getElementById('speech-mic-btn');
         if (isRecording) {
-          recognition.stop();
           isRecording = false;
-          btn.innerHTML = '🎤 마이크 켜기';
+          recognition.stop();
+          btn.textContent = '🎤 녹음 시작';
           btn.classList.remove('danger');
           btn.classList.add('outline');
         } else {
-          recognition.start();
           isRecording = true;
-          btn.innerHTML = '🛑 녹음 중지...';
+          recognition.start();
+          btn.textContent = '🛑 녹음 중지';
           btn.classList.remove('outline');
           btn.classList.add('danger');
-          document.getElementById('raw-notes').placeholder = '맥북 로컬 엔진이 음성을 듣고 실시간으로 타이핑하고 있습니다...';
         }
       }
 
-      // Local Ollama Summary
-      async function summarizeWithOllama() {
-        const rawText = document.getElementById('raw-notes').value;
-        const resultBox = document.getElementById('ai-summary-result');
-        
-        if (!rawText.trim()) {
-          alert("요약할 원본 발언을 먼저 입력하거나 마이크로 녹음해주세요.");
+      // ===== 모임 전체 요약 리포트 (OpenAI) =====
+      async function summarizeMeetingWithOpenAI() {
+        const resultBox = document.getElementById('meeting-summary-result');
+        const apiKey = (document.getElementById('openai-api-key')?.value || '').trim();
+        if (!apiKey) {
+          alert('우측 상단에 OpenAI API 키를 먼저 입력해주세요.');
           return;
         }
-        
-        resultBox.innerHTML = '<span style="color: var(--accent-strong);">🦙 로컬 Ollama 모델(Llama 3 등)로 요약 중입니다... ⏳</span><br><br><small style="color: var(--text-muted);">※ 맥북에 Ollama가 설치되어 실행 중이어야 합니다. (기본 포트: 11434)</small>';
-        
+
+        const sessionId = currentSessionId();
+        const notes = getPostits(sessionId);
+        const worksheets = [];
+        (window.clubMembers || []).forEach(member => {
+          const memo = localStorage.getItem(`worksheet_${sessionId}_${member}`);
+          if (memo && memo.trim()) worksheets.push(`- ${member}: ${memo.trim()}`);
+        });
+
+        if (notes.length === 0 && worksheets.length === 0) {
+          alert('요약할 기록이 없습니다. 발언 포스트잇이나 워크플로우 메모를 먼저 남겨주세요.');
+          return;
+        }
+
+        const speechLog = notes.slice().reverse().map(n => `- [${n.time}] ${n.member}: ${n.raw || n.summary}`).join('\n');
+        resultBox.innerHTML = '<span style="color: var(--accent-strong);">🌟 GPT-4o-mini가 오늘 모임 전체를 회의록으로 정리하고 있습니다... ⏳</span>';
+
         try {
-          const response = await fetch('http://localhost:11434/api/generate', {
+          const res = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
             body: JSON.stringify({
-              model: 'llama3', // Ollama에 설치된 모델 이름으로 변경 가능 (예: llama3, mistral)
-              prompt: `다음 회의 발언 내용을 세 줄로 핵심만 명확하게 요약해 줘. 무조건 한국어로 답변해.\n\n발언 내용:\n${rawText}`,
-              stream: false
+              model: 'gpt-4o-mini',
+              messages: [
+                { role: 'system', content: '너는 독서모임 서기야. 아래 발언 기록과 워크플로우 설계 메모를 바탕으로 한국어 회의록을 작성해. 구성: 1) 오늘의 핵심 논의 3줄 요약 2) 멤버별 주요 발언 정리 3) 다음 모임까지의 액션 아이템. 마크다운 없이 읽기 좋은 일반 텍스트로 써.' },
+                { role: 'user', content: `[발언 기록]\n${speechLog || '(없음)'}\n\n[워크플로우 설계 메모]\n${worksheets.join('\n') || '(없음)'}` }
+              ],
+              temperature: 0.4
             })
           });
-          
-          if (response.ok) {
-            const data = await response.json();
-            resultBox.innerHTML = `<strong>[Ollama 로컬 요약]</strong><br><br>${data.response.replace(/\\n/g, '<br>')}`;
-          } else {
-            throw new Error(`HTTP Error: ${response.status}`);
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `HTTP ${res.status}`);
           }
+          const data = await res.json();
+          const content = data.choices?.[0]?.message?.content || '';
+          resultBox.textContent = content;
+          resultBox.style.whiteSpace = 'pre-wrap';
         } catch (err) {
-          console.error(err);
-          resultBox.innerHTML = `
-            <span style="color: #ef4444;">Ollama 연결 실패!</span>
-            <br><br>
-            <small style="color: var(--text-muted);">
-            ※ 이유: 로컬 맥북에 Ollama가 켜져 있지 않거나, 모델('llama3')이 설치되어 있지 않습니다.<br>
-            ※ 실행 방법: 터미널에서 <code>ollama run llama3</code> 입력 후 다시 시도해 보세요.
-            </small>
-            <br><br>
-            <strong>[데모 요약 결과]</strong><br>
-            - 업무 자동화는 필수불가결한 요소임.<br>
-            - n8n과 로컬 AI를 결합하면 보안과 비용 모두 잡을 수 있음.<br>
-            - <strong>Next Action:</strong> Ollama 설치 및 llama3 모델 다운로드해 오기
-          `;
+          resultBox.innerHTML = `<span style="color: #ef4444;">요약 실패: ${err.message}</span><br><small style="color: var(--text-muted);">API 키와 네트워크 상태를 확인해주세요.</small>`;
         }
       }
 
-      // Feature 1: AI Brainstormer Logic
-      async function solveWithOllama() {
-        const input = document.getElementById('solver-input').value;
-        const resultBox = document.getElementById('solver-result');
-        
-        if (!input.trim()) {
-          alert("귀찮은 업무를 먼저 입력해주세요!");
-          document.getElementById('solver-input').focus();
-          return;
-        }
-        
-        resultBox.innerHTML = '<span style="color: var(--accent-strong);">🦙 Ollama가 최적의 n8n 파이프라인을 설계하고 있습니다... ⏳</span>';
-        
-        try {
-          const response = await fetch('http://localhost:11434/api/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              model: 'llama3',
-              prompt: `너는 최고의 업무 자동화(n8n) 전문가야. 다음 사용자의 귀찮은 반복 업무를 보고, 어떻게 n8n이나 Zapier로 자동화할 수 있을지 '트리거(시작)', '처리(AI/필터 등)', '출력(최종 동작)' 3단계로 나누어 명확하게 아키텍처 설계도를 짜줘. 무조건 한국어로 친절하게 대답해.\n\n사용자 업무: ${input}`,
-              stream: false
-            })
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            resultBox.innerHTML = `<strong>[n8n 자동화 아키텍처 제안]</strong><br><br>${data.response.replace(/\\n/g, '<br>')}`;
-          } else {
-            throw new Error(`HTTP Error: ${response.status}`);
-          }
-        } catch (err) {
-          resultBox.innerHTML = `
-            <span style="color: #ef4444;">Ollama 연결 실패! (데모 설계도를 보여줍니다)</span>
-            <br><br>
-            <strong>[n8n 자동화 아키텍처 제안 (데모)]</strong><br><br>
-            ⚡ <strong>트리거:</strong> Slack (지정된 채널에 새로운 메시지 감지)<br>
-            🧠 <strong>처리:</strong> OpenAI (메시지 내용에서 업무 내용만 추출 및 요약)<br>
-            ✅ <strong>출력:</strong> Google Sheets / Notion (추출된 데이터를 새로운 행으로 적재)
-            <br><br>
-            <small style="color: var(--text-muted);">이러면 매일 복붙하는 시간을 0으로 만들 수 있어요! 🎉</small>
-          `;
-        }
+      function copyMeetingSummary() {
+        const text = document.getElementById('meeting-summary-result').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          alert('요약 결과가 복사되었습니다!');
+        });
       }
     </script>
   
-        <script>
-              try { whisperPreviewRecognition.start(); } catch(e) {}
-            }
-            
-            // --- Audio Chunking for Whisper ---
-            window.whisperMediaRecorder.ondataavailable = e => {
-              if (e.data.size > 0) window.whisperAudioChunks.push(e.data);
-            };
-            
-            window.whisperMediaRecorder.onstop = async () => {
-              cancelAnimationFrame(drawVisual);
-              canvas.style.display = 'none';
-              stream.getTracks().forEach(track => track.stop());
-              if(whisperPreviewRecognition) whisperPreviewRecognition.stop();
-              
-              textarea.placeholder = "🤖 OpenAI Whisper API로 음성 변환 중... (약 2~5초 소요)";
-              btn.innerHTML = '⏳ Whisper API 변환 중...';
-              btn.disabled = true;
-              btn.classList.remove('danger');
-              
-              try {
-                const apiKey = document.getElementById('openai-api-key') ? document.getElementById('openai-api-key').value.trim() : localStorage.getItem('openai_api_key');
-                if (!apiKey) {
-                  throw new Error("화면 아래쪽 [모임 전체 내용 요약 리포트] 박스에 OpenAI API 키를 입력해주세요!");
-                }
-                
-                const blob = new Blob(window.whisperAudioChunks, { type: 'audio/webm' });
-                const formData = new FormData();
-                
-                formData.append('file', blob, 'audio.webm');
-                formData.append('model', 'whisper-1');
-                formData.append('language', 'ko');
-                
-                const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-                  method: 'POST',
-                  headers: {
-                    'Authorization': `Bearer ${apiKey}`
-                  },
-                  body: formData
-                });
-                
-                if (!response.ok) {
-                  const errorData = await response.json();
-                  throw new Error(errorData.error?.message || "OpenAI API 에러");
-                }
-                
-                const result = await response.json();
-                
-                if(result.text && result.text.trim() !== '') {
-                  textarea.value = result.text.trim();
-                }
-                textarea.placeholder = "변환이 완료되었습니다.";
-              } catch (err) {
-                console.error(err);
-                if (textarea.value.trim() === '') {
-                  textarea.value = "Whisper 변환 실패: " + err.message + " (임시 스크립트가 유지됩니다.)";
-                } else {
-                  alert("Whisper 변환 실패: " + err.message);
-                }
-              } finally {
-                btn.innerHTML = '🎤 녹음 시작';
-                btn.disabled = false;
-                btn.classList.add('outline');
-              }
-            };
-            
-            window.whisperMediaRecorder.start();
-            window.isWhisperRecording = true;
-            btn.innerHTML = '🛑 녹음 완료 & 고품질 변환';
-            btn.classList.remove('outline');
-            btn.classList.add('danger');
-            textarea.placeholder = "🔴 녹음 중입니다... (말씀을 마치면 '녹음 완료'를 눌러주세요)";
-            textarea.value = '';
-            
-          } catch (err) {
-            alert("마이크 권한을 허용해주세요!");
-            console.error(err);
-          }
-        } else {
-          window.whisperMediaRecorder.stop();
-          window.isWhisperRecording = false;
-        }
-        } catch(topLevelErr) {
-          alert("버튼 동작 에러: " + topLevelErr.message);
-          console.error(topLevelErr);
-        }
-      };
-    </script>
 
 
 </body>
