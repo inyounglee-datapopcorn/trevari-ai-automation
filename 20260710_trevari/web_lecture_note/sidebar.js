@@ -41,7 +41,7 @@
       <div class="mod-group">
         <div class="mod-label">3회차 (9/11)</div>
         <div class="ch-block" data-ch="ch03">
-          <a class="ch-head" href="ch03.html"><span class="ch-num">03</span><span class="ch-name">첫 자동화 v1 만들기</span></a>
+          <a class="ch-head" href="ch03.html"><span class="ch-num">03</span><span class="ch-name">작고 단단한 시스템 만들기</span></a>
         </div>
       </div>
 
