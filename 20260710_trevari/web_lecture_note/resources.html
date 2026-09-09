@@ -7,6 +7,57 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
     <link rel="stylesheet" href="sidebar.css" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .pf-label { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin: 26px 0 12px; }
+      .pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin: 0 0 8px; }
+      .pf-card { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+      .pf-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+      .pf-badge { align-self: flex-start; font-size: 10.5px; font-weight: 800; letter-spacing: 0.04em; padding: 4px 10px; border-radius: 999px; background: var(--accent-bg); color: var(--accent-strong); }
+      .pf-name { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 2px; }
+      .pf-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; flex: 1; }
+      @media (max-width: 780px) { .pf-grid { grid-template-columns: 1fr; } }
+
+      .res-link-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 36px;
+      }
+      @media (max-width: 780px) { .res-link-grid { grid-template-columns: 1fr; } }
+      .res-link-card {
+        padding: 20px;
+        background: var(--bg-elev);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .res-link-card h4 {
+        margin: 0;
+        font-size: 16px;
+        color: var(--text);
+      }
+      .res-link-card p {
+        margin: 0;
+        font-size: 13.5px;
+        color: var(--text-muted);
+        line-height: 1.6;
+        flex: 1;
+      }
+      .res-link-card a {
+        align-self: flex-start;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 6px 12px;
+        background: var(--accent-bg);
+        color: var(--accent-strong);
+        border-radius: 6px;
+        border: 1px solid rgba(255,102,2,0.2);
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
     <div class="layout">
@@ -17,19 +68,8 @@
         <p class="lead">AI 자동화를 구축하고 실습할 때, 막힐 때마다 꺼내볼 수 있는 유용한 링크와 참고 자료들을 한곳에 모아두었습니다.</p>
 
         <hr />
-        
 
         <h3>📚 함께 읽는 자료 요약</h3>
-        <style>
-          .pf-label { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin: 26px 0 12px; }
-          .pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin: 0 0 8px; }
-          .pf-card { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
-          .pf-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
-          .pf-badge { align-self: flex-start; font-size: 10.5px; font-weight: 800; letter-spacing: 0.04em; padding: 4px 10px; border-radius: 999px; background: var(--accent-bg); color: var(--accent-strong); }
-          .pf-name { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 2px; }
-          .pf-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; flex: 1; }
-          @media (max-width: 780px) { .pf-grid { grid-template-columns: 1fr; } }
-        </style>
         <div class="pf-grid" style="margin-bottom: 36px;">
           <a class="pf-card" href="ch01.html">
             <span class="pf-badge">1회차 (7/10)</span>
@@ -43,14 +83,41 @@
           </a>
           <a class="pf-card" href="ch03.html">
             <span class="pf-badge">3회차 (9/11)</span>
-            <div class="pf-name">boil-the-ocean</div>
-            <div class="pf-desc">작고 가치 있는 첫 v1을 만드는 Y Combinator의 철학입니다.</div>
+            <div class="pf-name">Boil the ocean &amp; gstack</div>
+            <div class="pf-desc">작고 가치 있는 첫 v1과 YC 개리 탄의 가상 엔지니어링 팀 스킬입니다.</div>
           </a>
           <a class="pf-card" href="ch04.html">
             <span class="pf-badge">4회차 (10/9)</span>
             <div class="pf-name">파타고니아, 파도가 칠 때는 서핑을</div>
             <div class="pf-desc">효율을 넘어 나만의 진짜 일과 가치를 되찾는 질문을 던집니다.</div>
           </a>
+        </div>
+
+        <h3>📺 3회차(9/11) 추천 강연 &amp; 오픈소스 레퍼런스</h3>
+        <div class="res-link-grid">
+          <div class="res-link-card">
+            <h4>🎬 Garry Tan: Own Your Intelligence</h4>
+            <p>YC Startup School 2026. 인공지능을 외부에서 빌려 쓰지 않고(Rent), 마크다운과 로컬 에이전트로 나만의 지능을 소유(Own)해 생산성을 400배 올리는 방법.</p>
+            <a href="https://youtu.be/eRrc1pUY5oU?si=VNEX9Wi9BJf3kZL2" target="_blank" rel="noopener">YouTube 시청하기 ↗</a>
+          </div>
+
+          <div class="res-link-card">
+            <h4>🎙️ Garry Tan: New Rules for Founders</h4>
+            <p>a16z Podcast. 인간의 인지적 병목을 없애고, 비즈니스 프로세스를 스킬화(Skillify)하여 "마크다운 직원"을 두는 1인/소수 팀의 미래.</p>
+            <a href="https://youtu.be/fsTtKywmWlU?si=CHCKSAaA61bvT2Ah" target="_blank" rel="noopener">YouTube 시청하기 ↗</a>
+          </div>
+
+          <div class="res-link-card">
+            <h4>📰 GeekNews: gstack 소개 기사</h4>
+            <p>개리 탄이 만든 AI 가상 엔지니어링 팀 오픈소스 소개. Think → Plan → Build → Review → Test → Ship 전체 스프린트 커맨드 요약.</p>
+            <a href="https://news.hada.io/topic?id=27756" target="_blank" rel="noopener">GeekNews 기사 보기 ↗</a>
+          </div>
+
+          <div class="res-link-card">
+            <h4>💻 GitHub: garrytan/gstack</h4>
+            <p>Garry Tan 공식 GitHub 레포지토리. Claude Code 등 에이전트 도구에서 <code>SKILL.md</code> 기반으로 동작하는 소스코드와 가이드.</p>
+            <a href="https://github.com/garrytan/gstack" target="_blank" rel="noopener">GitHub 저장소 방문 ↗</a>
+          </div>
         </div>
 
         <h3>📝 워크플로우 설계 템플릿</h3>
