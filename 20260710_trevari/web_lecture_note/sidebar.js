@@ -154,6 +154,16 @@
     .td-question strong { margin-bottom: 4px !important; font-size: 12px !important; }
     
     .td-accent { display: none !important; }
+    
+    /* 2페이지 분할 및 상세 스타일 */
+    .td-page-2 { page-break-before: always !important; break-before: page !important; margin-top: 0 !important; padding-top: 8px !important; }
+    .td-page-break-indicator { display: none !important; }
+    .td-term-item { margin-bottom: 7px !important; font-size: 10.5px !important; line-height: 1.35 !important; }
+    .td-term-item strong { color: #000 !important; font-size: 11px !important; font-weight: 800 !important; display: block !important; margin-bottom: 2px !important; }
+    .td-term-item p { margin: 0 !important; color: #333 !important; font-size: 10px !important; line-height: 1.35 !important; }
+    .td-cmd-box { padding: 6px 8px !important; border: 1px solid #ddd !important; border-radius: 6px !important; font-size: 9.5px !important; background: #fafafa !important; }
+    .td-cmd-box strong { font-size: 10px !important; }
+    .td-cmd-box p { font-size: 9px !important; line-height: 1.3 !important; margin: 2px 0 0 !important; }
   </style>
 </head>
 <body>
