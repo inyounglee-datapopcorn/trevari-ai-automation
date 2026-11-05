@@ -33,29 +33,26 @@
     <div class="layout">
       <aside class="sidebar" id="sidebar"></aside>
       <main class="main">
-        <div class="chapter-tag">트레바리 독서모임</div>
+        <div class="cohort-bar">
+          <label for="cohort-select">기수</label>
+          <select id="cohort-select" onchange="switchCohort(this.value)"></select>
+        </div>
+        <div class="chapter-tag" id="cohort-tag">트레바리 독서모임</div>
         <h1>내 일에 바로 써먹는 AI 자동화</h1>
-        <p class="lead">ChatGPT도, Claude도 써봤습니다. 그런데 막상 내 일에 가져와 붙이려 하면 어디서부터 손대야 할지 막막했을 거예요. 매일 반복되는 자잘한 일은 여전히 손으로 하나하나 처리하고 계실 거고요. 이 모임은 AI로 더 많은 일을 해내기가 아니라, <b>어떤 일은 자동화하고 어떤 일은 사람의 손에 남길지</b> 함께 선을 긋는 모임입니다.<br><br><span id="stats-container" style="display:inline-flex; align-items:center; gap:6px; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; font-size: 14.5px; font-weight: 700; color: var(--text);">🙋‍♂️ 참여 인원: 총 17명 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(시작 전 최종 확정 예정)</span></span></p>
+        <p class="lead"><span id="cohort-lead"></span><br><br><span id="stats-container" style="display:inline-flex; flex-wrap: wrap; align-items:center; gap:6px; padding: 6px 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; font-size: 14.5px; font-weight: 700; color: var(--text);"></span></p>
 
-        <!-- Feature 3: Keyword Cloud -->
-        <div class="keyword-cloud-container">
+        <figure id="cohort-photo" class="cohort-photo"></figure>
+        <div id="cohort-format"></div>
+
+        <div class="keyword-cloud-container" id="kw-container">
           <div class="kw-header">☁️ 1회차 독후감 핫 키워드</div>
-          <div class="kw-cloud">
-            <span class="kw kw-huge">n8n 워크플로우</span>
-            <span class="kw kw-large">생산성</span>
-            <span class="kw kw-medium">반복 업무</span>
-            <span class="kw kw-large">API 연동</span>
-            <span class="kw kw-small">환각 현상</span>
-            <span class="kw kw-huge">자동화</span>
-            <span class="kw kw-medium">프롬프트 엔지니어링</span>
-            <span class="kw kw-small">웹훅(Webhook)</span>
-            <span class="kw kw-medium">막막함</span>
-          </div>
+          <div class="kw-cloud" id="kw-cloud"></div>
         </div>
 
         <div class="grass-graph-container" id="grass-graph">
           <h3 style="margin-top:0;">멤버 활동 현황 (잔디밭)</h3>
-          <!-- Graph will be injected here via JS -->
+          <p id="graph-note" style="margin: 0 0 12px; font-size: 13px; color: var(--text-muted);"></p>
+          <div id="grass-matrix"></div>
         </div>
         
         <div class="tools-grid">
@@ -63,12 +60,7 @@
           <div class="tool-card picker-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
               <h3 style="margin: 0;">🎲 발표자 추첨기</h3>
-              <select id="picker-session-select" onchange="if(typeof updateManualMemberSelect === 'function') updateManualMemberSelect(); if(typeof renderPostits === 'function') renderPostits();" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard; font-size: 13px; outline: none;">
-                <option value="2026-07-10">1회차</option>
-                <option value="2026-08-14">2회차</option>
-                <option value="2026-09-11">3회차</option>
-                <option value="2026-10-09">4회차</option>
-              </select>
+              <select id="picker-session-select" onchange="if(typeof updateManualMemberSelect === 'function') updateManualMemberSelect(); if(typeof renderPostits === 'function') renderPostits();" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: Pretendard; font-size: 13px; outline: none;"></select>
             </div>
             <div class="picker-display" id="picker-result" style="margin-bottom: 8px; font-size: 24px;">발표자</div>
             <select id="manual-member-select" style="width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 6px; border: 1px solid var(--border); font-family: Pretendard; font-size: 14px; text-align: center; background: var(--bg-soft); outline: none; cursor: pointer;" onchange="if(this.value){ document.getElementById('picker-result').textContent = this.value; document.getElementById('picker-result').style.color = 'var(--accent-strong)'; window.currentPickedMember = this.value; var ps = document.getElementById('postit-speaker'); if(ps) ps.value = this.value; }">
@@ -153,6 +145,24 @@
         <hr />
 
         <style>
+          .curriculum-modules { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin: 14px 0 22px; }
+          .module-card { padding: 18px 20px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-sm); }
+          .module-head { display: flex; flex-direction: column; gap: 6px; }
+          .module-head h4 { margin: 0; font-size: 16px; }
+          .module-badge { align-self: flex-start; font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--accent-strong); }
+          .module-ba { font-size: 14px; color: var(--text-soft); margin: 10px 0 0; line-height: 1.6; }
+          .module-chapters { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; }
+          @media (max-width: 780px) { .curriculum-modules { grid-template-columns: 1fr; } }
+          .cohort-bar { display:flex; align-items:center; gap:10px; margin: 0 0 14px; }
+          .cohort-bar label { font-size: 13px; font-weight: 800; color: var(--text-muted); }
+          .cohort-bar select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elev); font-family: Pretendard, sans-serif; font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; }
+          .cohort-photo { margin: 18px 0 22px; }
+          .cohort-photo img { width: 100%; border-radius: 14px; border: 1px solid var(--border); display: block; }
+          .cohort-photo figcaption { font-size: 12.5px; color: var(--text-muted); margin-top: 8px; text-align: center; }
+          .format-box { padding: 16px 20px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; margin: 0 0 20px; }
+          .format-box ul { margin: 0; padding-left: 18px; line-height: 1.8; font-size: 14.5px; }
+          .module-read { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+          .pf-link { font-size: 13.5px; font-weight: 700; color: var(--accent-strong); text-decoration: none; }
           .pf-section-lead { font-size: 16px; color: var(--text-soft); margin: 0 0 18px; }
           .pf-label { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin: 26px 0 12px; }
           .pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin: 0 0 8px; }
@@ -167,79 +177,73 @@
 
         <h3>시즌 목표</h3>
         <p class="pf-section-lead">시즌이 끝날 즈음, 우리 손에 남는 것들입니다.</p>
-        <div class="pf-grid">
-          <div class="pf-card">
-            <div class="pf-name">✅ 하나의 실전 자동화</div>
-            <div class="pf-desc">적어도 내 일을 괴롭히던 반복 업무 하나가 실제로 돌아가는 자동화로 바뀝니다.</div>
-          </div>
-          <div class="pf-card">
-            <div class="pf-name">✅ 나만의 워크플로우</div>
-            <div class="pf-desc">'나만의 워크플로우 설계안' 한 장을 완성하여 앞으로의 든든한 기준점으로 삼습니다.</div>
-          </div>
-        </div>
+        <div class="pf-grid" id="goals-grid"></div>
+
+        <div id="benefits-wrap"></div>
 
         <h3>4개월의 여정</h3>
         <p>무엇을 다루고 어떻게 발전시킬 것인지, 한 달에 한 번씩 함께 고민하고 만들어 갑니다.</p>
-        <div class="curriculum-modules">
-          <div class="module-card">
-            <div class="module-head"><span class="module-badge">1회차</span><h4>자동화의 공통 언어 잡기</h4></div>
-            <p class="module-ba">내 일을 '트리거 → 처리 → 출력 → 검토'로 쪼개보고, 자동화에 올릴 후보 업무를 정합니다.</p>
-            <ul class="module-chapters"><li><a href="ch01.html">01 · 공통 언어 잡기 (7/10)</a></li></ul>
-          </div>
-          <div class="module-card">
-            <div class="module-head"><span class="module-badge">2회차</span><h4>'바쁘기만 한 일' 걷어내기</h4></div>
-            <p class="module-ba">메일 분류, 단순 입력처럼 바쁘기만 한 가짜 노동을 찾고 자동화로 넘길 대상을 확정합니다.</p>
-            <ul class="module-chapters"><li><a href="ch02.html">02 · 일 걷어내기 (8/14)</a></li></ul>
-          </div>
-          <div class="module-card">
-            <div class="module-head"><span class="module-badge">3회차</span><h4>작고 단단한 시스템 만들기</h4></div>
-            <p class="module-ba">무엇을 남기고 넘길지 기준을 정한 후, 작은 버전의 설계도를 그려보고 라이브 시연을 통해 첫 시스템을 완성합니다.</p>
-            <ul class="module-chapters"><li><a href="ch03.html">03 · 작고 단단한 시스템 (9/11)</a></li></ul>
-          </div>
-          <div class="module-card">
-            <div class="module-head"><span class="module-badge">4회차</span><h4>아낀 시간을 어디에 쓸 것인가</h4></div>
-            <p class="module-ba">자동화로 되찾은 시간을 어떻게 쓸지 논의하며, 최종 완성된 워크플로우를 서로 시연하고 공유합니다.</p>
-            <ul class="module-chapters"><li><a href="ch04.html">04 · 시간의 쓰임 (10/9)</a></li></ul>
-          </div>
-        </div>
+        <div class="curriculum-modules" id="curriculum"></div>
 
-        <blockquote class="cl-important">
-          <p>💡 <strong>노트북 지참 안내 (클럽장 라이브 시연 중심)</strong><br>모임 현장에서는 환경 세팅이나 에러 디버깅으로 시간이 지체되지 않도록 <strong>클럽장이 대화면으로 직접 핵심 워크플로우를 라이브 시연</strong>합니다. 깊은 토론과 질문 위주로 진행되며, 개인 노트북 지참은 자율입니다.</p>
-        </blockquote>
-
-        <div class="next-cta">
-          <div>
-            <div class="label">첫 모임 준비하기</div>
-            <div class="title">01 · 자동화의 공통 언어 잡기</div>
-          </div>
-          <a href="ch01.html">바로 가기 →</a>
-        </div>
+        <div id="notice-wrap"></div>
+        <div id="cta-wrap"></div>
       </main>
     </div>
+    <script src="cohorts.js"></script>
     <script src="sidebar.js" defer></script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        fetch('data.json')
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+      function switchCohort(id) {
+        try { localStorage.setItem('trevari_cohort', id); } catch (e) {}
+        const u = new URL(location.href); u.searchParams.set('c', id); history.replaceState(null, '', u);
+        loadCohort(id);
+      }
+      function renderCohortContent(id) {
+        const c = window.COHORTS[id];
+        document.getElementById('cohort-tag').textContent = c.tag;
+        document.getElementById('cohort-lead').innerHTML = c.lead;
+        const ph = document.getElementById('cohort-photo');
+        ph.innerHTML = c.photo ? `<img src="${c.photo.src}" alt="트레바리 단체사진 (얼굴 가림)" loading="lazy"><figcaption>${esc(c.photo.caption)}</figcaption>` : '';
+        document.getElementById('cohort-format').innerHTML = c.format ? `<div class="format-box"><ul>${c.format.map(f => `<li>${esc(f)}</li>`).join('')}</ul></div>` : '';
+        const kw = document.getElementById('kw-container');
+        kw.style.display = c.keywords ? '' : 'none';
+        document.getElementById('kw-cloud').innerHTML = (c.keywords || []).map(([w, s]) => `<span class="kw kw-${s}">${esc(w)}</span>`).join('');
+        document.getElementById('goals-grid').innerHTML = c.goals.map(([n, d]) => `<div class="pf-card"><div class="pf-name">${esc(n)}</div><div class="pf-desc">${esc(d)}</div></div>`).join('');
+        document.getElementById('benefits-wrap').innerHTML = c.benefits ? `<h3>멤버 혜택</h3><div class="pf-grid">${c.benefits.map(([n, d, url, lbl]) => `<div class="pf-card"><div class="pf-name">${esc(n)}</div><div class="pf-desc">${esc(d)}</div>${url ? `<a class="pf-link" href="${url}" target="_blank" rel="noopener">${esc(lbl)}</a>` : ''}</div>`).join('')}</div>` : '';
+        document.getElementById('curriculum').innerHTML = c.modules.map(m => `<div class="module-card"><div class="module-head"><span class="module-badge">${esc(m.badge)}</span><h4>${esc(m.title)}</h4></div><p class="module-ba">${esc(m.desc)}</p>${m.read ? `<div class="module-read">📖 읽을거리: ${m.readUrl ? `<a href="${m.readUrl}" target="_blank" rel="noopener">${esc(m.read)}</a>` : esc(m.read)}</div>` : ''}${m.link ? `<ul class="module-chapters"><li><a href="${m.link[0]}">${esc(m.link[1])}</a></li></ul>` : '<ul class="module-chapters"><li style="color: var(--text-muted);">교안은 모임 전에 열려요</li></ul>'}</div>`).join('');
+        document.getElementById('notice-wrap').innerHTML = c.notice ? `<blockquote class="cl-important"><p>${c.notice}</p></blockquote>` : '';
+        document.getElementById('cta-wrap').innerHTML = c.cta ? `<div class="next-cta"><div><div class="label">${esc(c.cta[0])}</div><div class="title">${esc(c.cta[1])}</div></div><a href="${c.cta[2]}">바로 가기 →</a></div>` : '';
+        document.getElementById('graph-note').textContent = c.graphNote || '';
+      }
+      function loadCohort(id) {
+        const c = window.COHORTS[id];
+        renderCohortContent(id);
+        const sel = document.getElementById('cohort-select');
+        if (sel.value !== id) sel.value = id;
+        fetch(`data/${id}.json`)
           .then(response => response.json())
           .then(data => {
             window.clubMembers = data.members;
             window.clubData = data;
+            const ps = document.getElementById('picker-session-select');
+            ps.innerHTML = data.sessions.map(s => `<option value="${s.id}">${esc(s.label.replace(/\(.*\)/, ''))}</option>`).join('');
+            document.getElementById('picker-result').textContent = '발표자';
             if (typeof updateManualMemberSelect === 'function') updateManualMemberSelect();
-            
-            const totalMembers = data.members.length;
-            let submittedCount = 0;
-            if (data.reviews && data.reviews["2026-07-10"]) {
-              submittedCount = Object.keys(data.reviews["2026-07-10"]).length;
-            }
-            const rate = Math.round((submittedCount / totalMembers) * 100);
-            
+
             const statsContainer = document.getElementById('stats-container');
-            if (statsContainer) {
-              statsContainer.innerHTML = `🙋‍♂️ 참여 인원: 총 ${totalMembers}명 <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(시작 전 최종 확정 예정)</span> <span style="margin-left: 8px; padding: 4px 10px; border-radius: 6px; background: var(--accent-strong); color: white; font-size: 13.5px; box-shadow: var(--shadow-sm);">📝 1회차 독후감 제출율: ${rate}% (${submittedCount}/${totalMembers}명)</span>`;
+            if (c.statsText) {
+              statsContainer.innerHTML = c.statsText;
+            } else {
+              const totalMembers = data.members.length;
+              const first = data.sessions[0].id;
+              const submittedCount = data.reviews && data.reviews[first] ? Object.keys(data.reviews[first]).length : 0;
+              const rate = totalMembers ? Math.round((submittedCount / totalMembers) * 100) : 0;
+              statsContainer.innerHTML = `🙋‍♂️ 참여 인원: 총 ${totalMembers}명 <span style="margin-left: 8px; padding: 4px 10px; border-radius: 6px; background: var(--accent-strong); color: white; font-size: 13.5px; box-shadow: var(--shadow-sm);">📝 1회차 독후감 제출율: ${rate}% (${submittedCount}/${totalMembers}명)</span>`;
             }
 
             const speakerSelect = document.getElementById('postit-speaker');
             if (speakerSelect) {
+              speakerSelect.innerHTML = '';
               data.members.slice().sort((a, b) => a.localeCompare(b, 'ko')).forEach(m => {
                 const opt = document.createElement('option');
                 opt.value = m;
@@ -248,19 +252,25 @@
               });
             }
             renderPostits();
-
             renderGraph(data);
           })
           .catch(error => {
             console.error('Error loading data:', error);
-            document.getElementById('grass-graph').innerHTML += '<p style="color: #ef4444;">데이터를 불러오지 못했습니다.</p>';
+            document.getElementById('grass-matrix').innerHTML = '<p style="color: #ef4444;">데이터를 불러오지 못했습니다.</p>';
           });
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        const sel = document.getElementById('cohort-select');
+        sel.innerHTML = Object.keys(window.COHORTS).map(k => `<option value="${k}">${esc(window.COHORTS[k].label)}</option>`).join('');
+        loadCohort(window.getCohortId());
       });
 
       function renderGraph(data) {
-        const container = document.getElementById('grass-graph');
-        const members = data.members.sort((a, b) => a.localeCompare(b, 'ko'));
-        const sessions = data.sessions;
+        const container = document.getElementById('grass-matrix');
+        container.innerHTML = '';
+        const members = data.members.slice().sort((a, b) => a.localeCompare(b, 'ko'));
+        const sessions = data.sessions.filter(s => !data.tracked_sessions || data.tracked_sessions.includes(s.id));
+        if (!members.length) { container.innerHTML = '<p style="font-size: 13.5px; color: var(--text-muted);">아직 멤버가 확정되지 않았어요.</p>'; return; }
         const records = data.records;
         
         const matrix = document.createElement('div');
@@ -304,7 +314,8 @@
             box.style.setProperty('--color-top-left', att ? '#40c463' : '#ebedf0');
             box.style.setProperty('--color-bottom-right', rev ? '#40c463' : '#ebedf0');
             
-            box.dataset.tooltip = `${member} - ${sess.label} (출석: ${att ? 'O' : 'X'}, 독후감: ${rev ? 'O' : 'X'})`;
+            const hasAtt = !!records[member] && (`${sess.id}_attendance` in records[member]);
+            box.dataset.tooltip = `${member} - ${sess.label} (출석: ${hasAtt ? (att ? 'O' : 'X') : '기록 없음'}, 독후감: ${rev ? 'O' : 'X'})`;
             
             if (rev && data.reviews && data.reviews[sess.id] && data.reviews[sess.id][member]) {
               box.style.cursor = 'pointer';

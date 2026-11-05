@@ -25,31 +25,19 @@
       </div>
 
       <div class="mod-group">
-        <div class="mod-label">1회차 (7/10)</div>
-        <div class="ch-block" data-ch="ch01">
-          <a class="ch-head" href="ch01.html"><span class="ch-num">01</span><span class="ch-name">자동화의 공통 언어 잡기</span></a>
-        </div>
+        <div class="mod-label">2기 · 2611 (11월 ~ 2월)</div>
+        <div class="ch-block" data-ch="s2-1"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">01</span><span class="ch-name">n8n 업무용 AI 챗봇 (11/13)</span></a></div>
+        <div class="ch-block" data-ch="s2-2"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">02</span><span class="ch-name">24시간 AI 비서 (12/11)</span></a></div>
+        <div class="ch-block" data-ch="s2-3"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">03</span><span class="ch-name">브라우저 AI (1/8)</span></a></div>
+        <div class="ch-block" data-ch="s2-4"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">04</span><span class="ch-name">AI 15초 숏폼 (2/12)</span></a></div>
       </div>
 
       <div class="mod-group">
-        <div class="mod-label">2회차 (8/14)</div>
-        <div class="ch-block" data-ch="ch02">
-          <a class="ch-head" href="ch02.html"><span class="ch-num">02</span><span class="ch-name">'바쁘기만 한 일' 걷어내기</span></a>
-        </div>
-      </div>
-
-      <div class="mod-group">
-        <div class="mod-label">3회차 (9/11)</div>
-        <div class="ch-block" data-ch="ch03">
-          <a class="ch-head" href="ch03.html"><span class="ch-num">03</span><span class="ch-name">작고 단단한 시스템 만들기</span></a>
-        </div>
-      </div>
-
-      <div class="mod-group">
-        <div class="mod-label">4회차 (10/9)</div>
-        <div class="ch-block" data-ch="ch04">
-          <a class="ch-head" href="ch04.html"><span class="ch-num">04</span><span class="ch-name">아낀 시간을 어디에 쓸 것인가</span></a>
-        </div>
+        <div class="mod-label">1기 · 2607 교안</div>
+        <div class="ch-block" data-ch="ch01"><a class="ch-head" href="ch01.html"><span class="ch-num">01</span><span class="ch-name">자동화의 공통 언어 잡기 (7/10)</span></a></div>
+        <div class="ch-block" data-ch="ch02"><a class="ch-head" href="ch02.html"><span class="ch-num">02</span><span class="ch-name">'바쁘기만 한 일' 걷어내기 (8/14)</span></a></div>
+        <div class="ch-block" data-ch="ch03"><a class="ch-head" href="ch03.html"><span class="ch-num">03</span><span class="ch-name">작고 단단한 시스템 만들기 (9/11)</span></a></div>
+        <div class="ch-block" data-ch="ch04"><a class="ch-head" href="ch04.html"><span class="ch-num">04</span><span class="ch-name">아낀 시간을 어디에 쓸 것인가 (10/9)</span></a></div>
       </div>
     </nav>
   `;
