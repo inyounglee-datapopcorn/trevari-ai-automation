@@ -32,7 +32,6 @@ window.COHORTS = {
     ],
     notice: null,
     cta: null,
-    graphNote: "모임이 시작되면 회차별 출석과 독후감 제출 현황이 여기에 표시돼요."
   },
   "2607": {
     label: "2607 · 1기 (2026.07 ~ 2026.10)",
@@ -55,7 +54,6 @@ window.COHORTS = {
     benefits: null,
     notice: "💡 <strong>노트북 지참 안내 (클럽장 라이브 시연 중심)</strong><br>1기 모임은 클럽장이 대화면으로 핵심 워크플로우를 라이브 시연하고, 토론과 질문 위주로 진행했습니다.",
     cta: ["1기 교안 보기", "01 · 자동화의 공통 언어 잡기", "ch01.html"],
-    graphNote: "1기는 1회차 독후감 제출 기록만 남아 있어요. (이름은 익명 처리)"
   }
 };
 window.DEFAULT_COHORT = "2611";
