@@ -261,7 +261,7 @@
       }
       document.addEventListener('DOMContentLoaded', () => {
         const sel = document.getElementById('cohort-select');
-        sel.innerHTML = Object.keys(window.COHORTS).map(k => `<option value="${k}">${esc(window.COHORTS[k].label)}</option>`).join('');
+        sel.innerHTML = Object.keys(window.COHORTS).sort().reverse().map(k => `<option value="${k}">${esc(window.COHORTS[k].label)}</option>`).join('');
         loadCohort(window.getCohortId());
       });
 
