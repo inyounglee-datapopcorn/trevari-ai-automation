@@ -4,7 +4,8 @@ window.COHORTS = {
     label: "2611 · 2기 (2026.11 ~ 2027.02)",
     tag: "트레바리 독서모임 · 2기",
     lead: "책 30분, 실습 2시간. 매달 내 일에 쓸 AI를 하나씩 직접 만듭니다. 이 모임은 AI로 더 많은 일을 해내기가 아니라, <b>어떤 일은 자동화하고 어떤 일은 사람의 손에 남길지</b> 함께 선을 긋는 모임입니다.",
-    statsText: "🙋‍♂️ 모집 중 <span style=\"font-size: 12px; font-weight: 500; color: var(--text-muted);\">(11/11 수 23:59 마감 · 최대 17명)</span>",
+    statsText: "🙋‍♂️ 정원 마감 <span style=\"font-size: 12px; font-weight: 500; color: var(--text-muted);\">(최대 17명)</span>",
+    trevariUrl: "https://trevar.ink/BaF1yG",
     keywords: null,
     photo: { src: "images/2607-group.webp", caption: "지난 1기(2607) 첫 모임 · 2026.07.10 (멤버 얼굴은 가렸어요)" },
     goals: [

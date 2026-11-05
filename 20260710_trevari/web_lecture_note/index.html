@@ -204,7 +204,7 @@
         document.getElementById('cohort-lead').innerHTML = c.lead;
         const ph = document.getElementById('cohort-photo');
         ph.innerHTML = c.photo ? `<img src="${c.photo.src}" alt="트레바리 단체사진 (얼굴 가림)" loading="lazy"><figcaption>${esc(c.photo.caption)}</figcaption>` : '';
-        document.getElementById('cohort-format').innerHTML = c.format ? `<div class="format-box"><ul>${c.format.map(f => `<li>${esc(f)}</li>`).join('')}</ul></div>` : '';
+        document.getElementById('cohort-format').innerHTML = c.format ? `<div class="format-box"><ul>${c.format.map(f => `<li>${esc(f)}</li>`).join('')}</ul>${c.trevariUrl ? `<a class="pf-link" style="display:inline-block; margin-top:10px;" href="${c.trevariUrl}" target="_blank" rel="noopener">트레바리 클럽 페이지 (독후감 제출·모임 정보) →</a>` : ''}</div>` : '';
         const kw = document.getElementById('kw-container');
         kw.style.display = c.keywords ? '' : 'none';
         document.getElementById('kw-cloud').innerHTML = (c.keywords || []).map(([w, s]) => `<span class="kw kw-${s}">${esc(w)}</span>`).join('');
