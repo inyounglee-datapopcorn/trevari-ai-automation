@@ -26,7 +26,7 @@
 
       <div class="mod-group">
         <div class="mod-label">2기 · 2611 (11월 ~ 2월)</div>
-        <div class="ch-block" data-ch="s2-1"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">01</span><span class="ch-name">n8n 업무용 AI 챗봇 (11/13)</span></a></div>
+        <div class="ch-block" data-ch="s2ch01"><a class="ch-head" href="s2ch01.html"><span class="ch-num">01</span><span class="ch-name">n8n 업무용 AI 챗봇 (11/13)</span></a></div>
         <div class="ch-block" data-ch="s2-2"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">02</span><span class="ch-name">24시간 AI 비서 (12/11)</span></a></div>
         <div class="ch-block" data-ch="s2-3"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">03</span><span class="ch-name">브라우저 AI (1/8)</span></a></div>
         <div class="ch-block" data-ch="s2-4"><a class="ch-head" href="index.html?c=2611#curriculum"><span class="ch-num">04</span><span class="ch-name">AI 15초 숏폼 (2/12)</span></a></div>

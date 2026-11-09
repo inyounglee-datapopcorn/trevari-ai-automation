@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2기 01. n8n으로 업무용 AI 챗봇 만들기 — 트레바리</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+    <link rel="stylesheet" href="sidebar.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"></aside>
+      <main class="main">
+        <div class="chapter-tag">2기 1회차 (11/13 금)</div>
+        <h1>n8n으로 업무용 AI 챗봇 만들기</h1>
+        <p class="lead">n8n 기본기를 익히고, 내 업무 자료를 바탕으로 답하는 AI Agent 챗봇을 직접 만듭니다. 책 이야기 30분, 실습 2시간으로 진행합니다.</p>
+
+        <hr />
+
+        <h3>읽을거리</h3>
+        <div class="read-card" style="display: flex; gap: 24px; align-items: flex-start; padding: 24px; background: var(--bg-elev); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 36px; box-shadow: var(--shadow-sm);">
+          <img src="https://r29hmvkwcd.execute-api.ap-northeast-2.amazonaws.com/images/books/9791175790438" alt="n8n이 다 해줌" style="width: 140px; border-radius: 6px; border: 1px solid var(--border);" />
+          <div>
+            <h4 style="margin-top:0; font-size: 1.3rem;">n8n이 다 해줌</h4>
+            <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 12px;">저자: 이인영, 임정</p>
+            <p style="font-size: 1rem; line-height: 1.6; color: var(--text);">이번 모임에서는 1장(n8n 시작하기), 2장(3T 프레임워크), 4장(AI Agent로 챗봇 만들기)을 중심으로 이야기합니다. 책에서 모든 업무를 Trigger(언제), Task(무엇을), Target(어디로) 세 단계로 쪼개 보는 방법을 배우고, 이번 회차에는 그 방법으로 내 업무용 챗봇을 직접 설계합니다.</p>
+          </div>
+        </div>
+
+        <div class="summary trevari-doc" style="position: relative; background: white; color: black; font-family: 'Pretendard', sans-serif; padding: 50px 40px; margin-bottom: 40px; margin-top: 40px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+  <style>
+    .trevari-doc * { box-sizing: border-box; }
+    .td-header { border-top: 4px solid black; border-bottom: 2px solid black; padding: 16px 0; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+    .td-title { font-size: 32px; font-weight: 800; margin: 0; letter-spacing: -0.05em; color: black; }
+    .td-date { font-size: 16px; font-weight: 800; margin: 0; color: black; }
+    .td-grid { display: grid; grid-template-columns: 140px 1fr; column-gap: 24px; }
+    .td-label { font-size: 16px; font-weight: 800; padding: 16px 0; border-bottom: 2px solid black; color: black; }
+    .td-value { font-size: 15px; font-weight: 800; padding: 16px 0; border-bottom: 2px solid black; color: black; }
+    .td-time-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; padding-bottom: 0; }
+    .td-time-item { padding: 12px 0; border-bottom: 1px solid black; font-size: 14px; font-weight: 800; color: black; }
+    .td-time-item:nth-last-child(1), .td-time-item:nth-last-child(2) { border-bottom: none; }
+    .td-main-label { font-size: 16px; font-weight: 800; padding: 24px 0; color: black; }
+    .td-main-content { padding: 24px 0; border-top: 3px solid black; color: black; }
+    .td-main-content h3 { font-size: 24px; font-weight: 900; margin: 0 0 24px 0; font-family: Arial, sans-serif; }
+    .td-question { font-size: 14.5px; line-height: 1.6; margin-bottom: 32px; color: black; }
+    .td-question strong { font-weight: 800; display: block; margin-bottom: 8px; }
+    .td-accent { position: absolute; bottom: 30px; right: -10px; width: 40px; height: 3px; background: #ff5a00; }
+  </style>
+
+  <div class="td-header">
+    <h2 class="td-title">내 일에 바로 써먹는 AI 자동화</h2>
+    <div class="td-date">2026년 11월 13일</div>
+  </div>
+
+  <div class="td-grid">
+    <div class="td-label">읽을거리</div>
+    <div class="td-value">이인영·임정 『n8n이 다 해줌』</div>
+
+    <div class="td-label">클럽장</div>
+    <div class="td-value">이인영 님</div>
+
+    <div class="td-label">시간표</div>
+    <div class="td-value" style="padding-bottom: 0;">
+      <div class="td-time-grid">
+        <div class="td-time-item">[1] 19:40 오프닝</div>
+        <div class="td-time-item">[2] 19:50 아이스브레이킹</div>
+        <div class="td-time-item">[3] 20:00 북토크 (발제 및 토론)</div>
+        <div class="td-time-item">[4] 20:30 n8n 기본기 &amp; 내 업무 챗봇 실습</div>
+        <div class="td-time-item">[5] 22:30 마무리 토크</div>
+        <div class="td-time-item">[6] 22:40 모임 끝!</div>
+      </div>
+    </div>
+
+    <div class="td-label">함께 볼 곳</div>
+    <div class="td-value">1장 n8n 시작하기 · 2장 3T 프레임워크 · 4장 AI Agent로 챗봇 만들기</div>
+
+    <div class="td-label">공지사항</div>
+    <div class="td-value">매 회차 개인 노트북 지참 필수! (실습 중심)<br>챗봇에게 읽힐 내 업무 자료 1개를 챙겨 오세요. (업무 안내문, 자주 받는 질문 모음 등. 개인정보와 사내 비밀이 없는 것으로)</div>
+
+    <div class="td-main-label">북토크</div>
+    <div class="td-main-content">
+      <h3>BOOK TALK 1</h3>
+      <div class="td-question">
+        <strong>• 1. 나와 나의 '복붙' 업무 소개하기</strong>
+        현재 어떤 일을 하고 계시나요? 하루 중 가장 많은 시간을 쓰는 반복 업무는 무엇이고, 4개월 동안 가장 얻어가고 싶은 것은 무엇인가요?
+      </div>
+      <div class="td-question">
+        <strong>• 2. 책 속 일곱 개의 봇 중, 내 일과 가장 닮은 것은?</strong>
+        책은 뉴스 수집봇, 날씨 알리미, 장바구니 도우미 AI, 회의록 서기, 영수증 정리봇, 투자 리포트 봇을 차례로 만들어 봅니다. "이건 내 일에 바로 쓰겠다" 싶었던 봇은 무엇이었고, 내 업무에 옮기면 어떤 모습일까요?
+      </div>
+      <div class="td-question">
+        <strong>• 3. 복붙 업무 해부하기: Trigger, Task, Target</strong>
+        책의 3T 프레임워크로 내 반복 업무를 쪼개 봅시다. 언제 시작되고(Trigger), 무엇을 처리하며(Task), 결과를 어디로 보내야(Target) 할까요? 말로 풀어 보면, 평소 당연하게 하던 판단이 어디에 숨어 있었는지 보입니다.
+      </div>
+      <div class="td-question">
+        <strong>• 4. 내 업무를 대신 답해 주는 챗봇, 어디까지 맡길까?</strong>
+        4장에서는 질문에 답하는 AI Agent 챗봇을 만듭니다. 내 업무에 챗봇을 둔다면 어떤 질문에 답하게 하고 싶으신가요? 반대로 챗봇이 틀린 답을 하면 곤란한 질문은 무엇이고, 그런 일은 사람 손에 남겨야 할까요?
+      </div>
+
+      <h3 style="margin-top: 48px;">PRACTICE &amp; WRAP-UP</h3>
+
+      <div class="td-question">
+        <strong>• 실습: n8n 기본기 익히고, 내 업무 챗봇 만들기 (20:30 ~ 22:30)</strong>
+        1) n8n 화면과 용어 익히기: 워크플로우, 노드, 실행, 게시<br>
+        2) Chat Trigger와 AI Agent 노드로 챗봇 뼈대 만들기<br>
+        3) 가져온 내 업무 자료를 연결해서, 그 자료를 바탕으로 답하게 하기<br>
+        4) 질문을 던져 보고 엉뚱한 답이 나오면 AI에게 주는 지시문(프롬프트)을 고치기
+      </div>
+      <div class="td-question">
+        <strong>• 마무리 토크</strong>
+        오늘 모임은 즐거우셨나요? 머리가 띵! 했던 순간이 있다면 언제인가요? 다음 모임(12/11) 전까지 오늘 만든 챗봇에 실제 업무 질문 3개를 던져 보고, 답이 맞았는지 적어 오세요. 2회차 읽을거리는 데니스 뇌르마르크 『진짜 노동』입니다.
+      </div>
+    </div>
+  </div>
+
+  <div class="td-page-break-indicator" style="margin: 48px -40px 36px; padding: 14px 40px; background: #f8f8f9; border-top: 2px dashed #d1d5db; border-bottom: 2px dashed #d1d5db; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+    <span style="font-size: 13.5px; font-weight: 800; color: #374151;">📄 발제문 2페이지 · 핵심 용어사전</span>
+    <span style="font-size: 12px; color: #6b7280;">(🖨 상단 '발제문 PDF 다운로드' 클릭 시 자동으로 2번째 장으로 출력됩니다)</span>
+  </div>
+
+  <div class="td-page-2">
+    <div class="td-header" style="margin-bottom: 20px;">
+      <h2 class="td-title">오늘 나올 말, 미리 보기</h2>
+      <div class="td-date">핵심 용어사전 · 1회차</div>
+    </div>
+    <div class="td-grid">
+      <div class="td-label">실습 흐름</div>
+      <div class="td-value sub" style="font-weight:600;">채팅창에 질문이 들어온다(Chat Trigger) → AI Agent가 질문을 읽는다 → 연결한 내 업무 자료를 찾아본다 → 답을 만들어 돌려준다.<br>이 흐름이 3T입니다. Trigger는 "질문이 들어올 때", Task는 "자료를 찾아 답 만들기", Target은 "채팅창에 답 보내기"입니다.</div>
+      <div class="td-label">핵심 용어사전</div>
+      <div class="td-value" style="padding-bottom: 8px;">
+        <div style="display: grid; gap: 12px;">
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">1. 3T 프레임워크</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">모든 업무를 Trigger(언제 시작하나), Task(무엇을 처리하나), Target(어디로 보내나) 세 칸으로 나누어 보는 책의 설계 방법입니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">2. 워크플로우(Workflow)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">여러 단계를 이어 붙인 자동화 한 세트입니다. n8n 화면의 캔버스 하나가 워크플로우 하나입니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">3. 노드(Node)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">워크플로우의 한 단계입니다. 블록처럼 하나씩 꺼내 선으로 이어 붙입니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">4. 트리거(Trigger)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">워크플로우를 시작시키는 신호입니다. 정해진 시간이 되었을 때, 채팅 메시지가 들어왔을 때 같은 것입니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">5. 게시(Publish)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">만든 워크플로우를 켜 두는 것입니다. 게시하기 전에는 직접 실행해 볼 때만 돌아갑니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">6. 스티키 노트(Sticky Note)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">캔버스에 붙이는 메모입니다. 큰 흐름을 먼저 글로 적어 두면 노드를 고를 때 길을 잃지 않습니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">7. Chat Trigger</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">채팅창으로 들어온 메시지를 받아 워크플로우를 시작하는 노드입니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">8. AI Agent 노드</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">질문을 이해하고, 연결된 AI 모델과 자료를 골라 써서 답을 만들어 내는 노드입니다. 챗봇의 두뇌 역할을 합니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">9. 프롬프트(Prompt)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">AI에게 주는 지시문입니다. "누구에게, 어떤 말투로, 무엇을 근거로 답하라"를 적어 줍니다. 엉뚱한 답은 대부분 여기를 고치면서 잡습니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">10. API</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">프로그램끼리 데이터를 주고받는 창구입니다. 책에서는 날씨와 농산물 가격 같은 외부 데이터를 가져올 때 씁니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">11. 웹훅(Webhook)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">어떤 일이 생겼을 때 정해진 주소로 알려 주는 방식입니다. 다른 서비스가 n8n을 깨우는 문이 됩니다.</p>
+                  </div>
+                  <div class="td-term-item">
+                    <strong style="color:#111;font-size:14.5px;">12. 자격 증명(Credential)</strong>
+                    <p style="margin:3px 0 0;font-size:13px;color:#374151;line-height:1.55;">Gmail, AI 모델 같은 서비스를 연결할 때 쓰는 로그인 정보와 API 키입니다. 남에게 보여 주거나 화면에 공유하지 않습니다.</p>
+                  </div>
+        </div>
+      </div>
+      <div class="td-label">막혔을 때</div>
+      <div class="td-value" style="font-weight:600;">① 노드 옆의 초록 체크와 빨간 느낌표부터 확인합니다. 어느 노드에서 멈췄는지가 가장 큰 단서입니다. ② 그 노드의 입력(Input)과 출력(Output) 데이터를 열어 봅니다. ③ 그래도 안 풀리면 손을 들고 클럽장에게 화면을 보여 주세요. 막히는 지점이 곧 오늘의 학습입니다.</div>
+    </div>
+  </div>
+
+  <div class="td-accent"></div>
+</div>
+
+        <h3>이번 회차 체크리스트</h3>
+        <ul style="list-style-type: none; padding-left: 0; font-size: 1rem; line-height: 2.2;">
+          <li><label><input type="checkbox" style="accent-color: var(--accent); margin-right: 8px;"> 노트북과 충전기 챙기기</label></li>
+          <li><label><input type="checkbox" style="accent-color: var(--accent); margin-right: 8px;"> 챗봇에게 읽힐 내 업무 자료 1개 준비 (개인정보와 사내 비밀 없는 것)</label></li>
+          <li><label><input type="checkbox" style="accent-color: var(--accent); margin-right: 8px;"> 『n8n이 다 해줌』 1장, 2장, 4장 훑어 읽기</label></li>
+          <li><label><input type="checkbox" style="accent-color: var(--accent); margin-right: 8px;"> 내 반복 업무 하나를 Trigger, Task, Target으로 나눠 보기</label></li>
+        </ul>
+
+        <div class="next-cta" style="margin-top: 40px;">
+          <div>
+            <div class="label">시즌 개요로</div>
+            <div class="title">2기 전체 일정 보기</div>
+          </div>
+          <a href="index.html?c=2611#curriculum">돌아가기 →</a>
+        </div>
+      </main>
+    </div>
+    <script src="sidebar.js" defer></script>
+  </body>
+</html>
