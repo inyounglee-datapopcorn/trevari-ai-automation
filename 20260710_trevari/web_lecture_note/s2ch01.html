@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
     <title>2기 01. n8n으로 업무용 AI 챗봇 만들기 — 트레바리</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
     <link rel="stylesheet" href="sidebar.css" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="s2ch01-reviews.css" />
   </head>
   <body>
     <div class="layout">
@@ -15,6 +17,8 @@
         <div class="chapter-tag">2기 1회차 (11/13 금)</div>
         <h1>n8n으로 업무용 AI 챗봇 만들기</h1>
         <p class="lead">n8n 기본기를 익히고, 내 업무 자료를 바탕으로 답하는 AI Agent 챗봇을 직접 만듭니다. 책 이야기 30분, 실습 2시간으로 진행합니다.</p>
+
+        <a class="reading-jump" href="#review-room">서로의 독후감 키워드 먼저 보기 <span aria-hidden="true">↓</span></a>
 
         <hr />
 
@@ -27,6 +31,36 @@
             <p style="font-size: 1rem; line-height: 1.6; color: var(--text);">이번 모임에서는 1장(n8n 시작하기), 2장(3T 프레임워크), 4장(AI Agent로 챗봇 만들기)을 중심으로 이야기합니다. 책에서 모든 업무를 Trigger(언제), Task(무엇을), Target(어디로) 세 단계로 쪼개 보는 방법을 배우고, 이번 회차에는 그 방법으로 내 업무용 챗봇을 직접 설계합니다.</p>
           </div>
         </div>
+
+        <section class="reading-room" id="review-room" aria-labelledby="review-room-title" tabindex="-1">
+          <div class="rr-inner">
+            <p class="rr-eyebrow">2기 1회차 · 서로의 독후감 읽기</p>
+            <div class="rr-heading">
+              <div><h2 id="review-room-title">같은 책, 서로 다른 출발점</h2>
+                <p class="rr-intro">나는 무엇을 맡기고 싶고, 어디에서 막혔을까요?<br>키워드로 서로를 알아보고, 비슷한 고민을 나눠보세요.</p></div>
+              <div class="rr-top-actions"><button class="rr-button" type="button" data-review-compact aria-pressed="false">키워드만 보기</button><button class="rr-button" type="button" data-review-present aria-pressed="false">모임 화면</button></div>
+            </div>
+            <div class="rr-stats">
+              <span><strong data-review-total>—</strong> 편의 독후감</span>
+              <span data-review-members></span><span data-review-date></span>
+              <a data-review-source href="https://m.trevari.co.kr/bookreviews?clubHistoryIds=822f6551-64cc-4e4f-8e5d-95ac99d94187" target="_blank" rel="noopener noreferrer">원문 독후감 피드 ↗</a>
+            </div>
+            <div data-review-controls hidden>
+              <p class="rr-filter-label">어떤 이야기가 겹칠까요? · 주제별 독후감 수, 중복 포함</p>
+              <div class="rr-topics" data-review-topics aria-label="독후감 주제 필터"></div>
+              <div class="rr-search-row">
+                <input class="rr-search" type="search" data-review-search aria-label="이름 또는 키워드 검색" placeholder="이름 또는 키워드 찾기" autocomplete="off">
+                <button type="button" class="rr-reset" data-review-reset hidden>전체로 돌아가기</button>
+              </div>
+            </div>
+            <p class="rr-result" data-review-result role="status" aria-live="polite">독후감 키워드를 불러오는 중입니다.</p>
+            <div class="rr-grid" data-review-grid style="margin-top:14px;"></div>
+            <p class="rr-empty" data-review-empty hidden>일치하는 글이 없어요. 다른 이름이나 키워드로 찾아보세요.</p>
+            <div class="rr-how"><strong>함께 보는 순서</strong><span>내 카드가 내 생각과 맞는지 한마디 → 나와 고민이 비슷한 사람 찾기 → 서로 다른 출발점에서 오늘 만들 첫 자동화 이야기하기</span></div>
+            <p class="rr-footnote">이번 책 『n8n이 다 해줌』의 독후감만 모았습니다. 전체 멤버의 제출률이나 참석 확정 명단이 아닙니다.<br>키워드·한 줄 요약은 글의 취지를 정리한 편집 요약입니다. ‘대화 제안’은 진행을 위한 질문이며 원문 인용이 아닙니다. 전문·회사 세부정보는 옮기지 않았습니다.</p>
+            <noscript><p>키워드 모아보기를 사용하려면 자바스크립트를 켜 주세요. 원문은 위 독후감 피드에서 볼 수 있습니다.</p></noscript>
+          </div>
+        </section>
 
         <div class="summary trevari-doc" style="position: relative; background: white; color: black; font-family: 'Pretendard', sans-serif; padding: 50px 40px; margin-bottom: 40px; margin-top: 40px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
   <style>
@@ -206,5 +240,6 @@
       </main>
     </div>
     <script src="sidebar.js" defer></script>
+    <script src="s2ch01-reviews.js" defer></script>
   </body>
 </html>

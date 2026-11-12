@@ -1,0 +1,84 @@
+/* 2기 첫 모임: 독후감 키워드 모아보기. 다른 교안의 스타일은 바꾸지 않는다. */
+.reading-jump {display:inline-flex;align-items:center;gap:12px;margin:-24px 0 32px;font-size:15px;font-weight:700;}
+.reading-room {margin:52px 0 64px;scroll-margin-top:28px;}
+.rr-inner {max-width:1440px;margin:0 auto;}
+.rr-eyebrow {margin:0 0 10px;font-size:12px;font-weight:700;color:var(--accent-strong);letter-spacing:.03em;}
+.reading-room h2 {margin:0 0 14px;font-size:32px;line-height:1.25;letter-spacing:-.04em;}
+.rr-heading {display:flex;justify-content:space-between;align-items:flex-start;gap:20px;}
+.rr-intro {font-size:15px;line-height:1.7;margin:0 0 18px;color:var(--text-soft);}
+.rr-top-actions {display:flex;gap:8px;flex-shrink:0;}
+.reading-room button,.reading-room input {font:inherit;}
+.rr-button {border:1px solid var(--border-strong);border-radius:8px;background:var(--bg-elev);color:var(--text);padding:9px 13px;cursor:pointer;font-size:13px!important;font-weight:700!important;white-space:nowrap;}
+.rr-button:hover {border-color:var(--accent);color:var(--accent-strong);}
+.reading-room :is(button,input,a,summary):focus-visible {outline:3px solid var(--accent);outline-offset:3px;}
+.rr-stats {display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--text-muted);margin:0 0 22px;}
+.rr-stats strong {font-size:20px;color:var(--text);font-variant-numeric:tabular-nums;}
+.rr-stats a {font-size:12px;}
+.rr-filter-label {font-size:12px;color:var(--text-muted);margin:0 0 8px;}
+.rr-topics {display:flex;flex-wrap:wrap;gap:7px;margin:0 0 18px;}
+.rr-topic {border:1px solid var(--border-strong);border-radius:100px;background:var(--bg-elev);color:var(--text-soft);padding:7px 12px;cursor:pointer;font-size:12px!important;font-weight:600!important;line-height:1.4;}
+.rr-topic span {margin-left:7px;opacity:.65;font-variant-numeric:tabular-nums;}
+.rr-topic[aria-pressed="true"] {border-color:var(--accent-strong);background:var(--accent-bg);color:var(--accent-strong);}
+.rr-search-row {display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;}
+.rr-search {width:260px;max-width:100%;min-width:0;background:var(--bg-elev);border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;font-size:13px!important;color:var(--text);}
+.rr-result {font-size:12px;color:var(--text-muted);margin:0;}
+.rr-reset {border:0;background:none;padding:4px;color:var(--accent-strong);font-size:12px!important;cursor:pointer;}
+.rr-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.rr-card {background:var(--bg-elev);border:1px solid var(--border-strong);border-radius:12px;padding:18px;min-width:0;}
+.rr-card[hidden],.reading-room [hidden] {display:none!important;}
+.rr-card-head {display:flex;justify-content:space-between;gap:8px;align-items:center;margin:0 0 12px;}
+.rr-card h3 {margin:0;font-size:20px;line-height:1.2;font-weight:800;letter-spacing:-.03em;}
+.rr-guest {font-size:10px;color:var(--text-muted);border:1px solid var(--border-strong);border-radius:4px;padding:2px 5px;white-space:nowrap;}
+.rr-keywords {display:flex;gap:5px;flex-wrap:wrap;list-style:none;padding:0;margin:0 0 12px;}
+.rr-keywords li {margin:0;padding:3px 7px;background:var(--accent-bg);color:var(--accent-strong);border-radius:5px;font-size:12px;font-weight:650;line-height:1.5;}
+.rr-summary {font-size:14px;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere;margin:0;color:var(--text-soft);}
+.rr-question {border-top:1px solid var(--border);margin-top:14px;padding-top:10px;}
+.rr-question summary {font-size:11px;color:var(--text-muted);cursor:pointer;}
+.rr-question p {font-size:14px;line-height:1.65;margin:9px 0 0;word-break:keep-all;color:var(--text);}
+.rr-empty {padding:36px 12px;text-align:center;color:var(--text-muted);font-size:14px;}
+.rr-footnote {margin:18px 0 0;font-size:11px;line-height:1.7;color:var(--text-muted);}
+.rr-how {display:flex;gap:10px;align-items:flex-start;background:var(--bg-soft);padding:14px 16px;border-radius:8px;margin:22px 0 0;font-size:13px;line-height:1.7;color:var(--text-soft);}
+.rr-how strong {color:var(--text);white-space:nowrap;}
+body.rr-presenting {overflow:hidden;}
+body.rr-presenting .reading-room {position:fixed;inset:0;z-index:10000;overflow:auto;overscroll-behavior:contain;background:var(--bg);margin:0;padding:28px 36px 44px;scroll-margin-top:0;}
+body.rr-presenting .rr-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+body.rr-presenting .rr-heading h2 {font-size:36px;}
+body.rr-presenting .rr-card h3 {font-size:22px;}
+body.rr-presenting .rr-summary {font-size:15px;}
+body.rr-presenting .rr-keywords li {font-size:13px;}
+body.rr-presenting .rr-how {margin-top:16px;}
+@media(min-width:1380px){body.rr-presenting .rr-grid {grid-template-columns:repeat(4,minmax(0,1fr));}body.rr-presenting .rr-card {padding:16px;}body.rr-presenting .rr-question {margin-top:10px;padding-top:7px;}}
+@media(max-width:1000px){body.rr-presenting .rr-grid {grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:620px){.rr-heading {flex-direction:column;gap:12px;}.reading-room h2 {font-size:28px;}.rr-grid,body.rr-presenting .rr-grid {grid-template-columns:1fr;}.rr-top-actions {width:100%;}.rr-stats {gap:12px;}.rr-search {width:100%;}.rr-search-row {gap:8px;}.rr-how {display:block;}.rr-how strong {display:block;margin-bottom:4px;}body.rr-presenting .reading-room {padding:24px 20px 40px;}body.rr-presenting .rr-heading h2 {font-size:28px;}}
+@media(prefers-reduced-motion:no-preference){.rr-card {animation:rr-appear .35s ease-out both;}@keyframes rr-appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}}
+@media print{.rr-top-actions,.rr-topics,.rr-search-row,.rr-how {display:none!important;}.reading-room {break-before:page;}.rr-card {break-inside:avoid;}.rr-grid {grid-template-columns:repeat(2,minmax(0,1fr));}.rr-question {display:none;}}
+
+/* 모임 화면은 키워드부터 한눈에. 카드 안에서 요약을 다시 펼칠 수 있다. */
+.rr-context {display:none;}
+.rr-compact .rr-summary {display:none;}
+.rr-compact .rr-context {display:block;color:var(--text-soft);}
+.rr-compact .rr-question {margin-top:10px;padding-top:8px;}
+body.rr-presenting .rr-intro {display:none;}
+body.rr-presenting .rr-stats {margin-bottom:12px;}
+body.rr-presenting .rr-topics {margin-bottom:12px;}
+body.rr-presenting .rr-search-row {margin-bottom:10px;}
+body.rr-presenting .rr-compact .rr-card {padding:14px 16px;}
+body.rr-presenting .rr-compact .rr-card-head {margin-bottom:10px;}
+body.rr-presenting .rr-compact .rr-keywords {margin-bottom:0;}
+body.rr-presenting .rr-compact .rr-card {padding:12px 14px;}
+body.rr-presenting .rr-compact .rr-card-head {margin-bottom:8px;}
+body.rr-presenting .rr-compact .rr-question {margin-top:6px;padding-top:6px;}
+/* 이 회차의 기존 읽을거리·발제문도 좁은 화면에서 내용을 밀어내지 않도록 한다. */
+.main {min-width:0;}
+@media(max-width:620px){
+  .read-card {flex-direction:column!important;gap:16px!important;padding:20px!important;}
+  .read-card img {width:100px!important;}
+  .read-card>div {min-width:0;}
+  .trevari-doc {padding:26px 18px!important;}
+  .trevari-doc .td-header {flex-direction:column;align-items:flex-start;gap:10px;}
+  .trevari-doc .td-title {font-size:24px;}
+  .trevari-doc .td-grid,.trevari-doc .td-time-grid {grid-template-columns:1fr;}
+  .trevari-doc .td-label {padding:12px 0 4px;border-bottom:none;}
+  .trevari-doc .td-value {padding:4px 0 16px;min-width:0;overflow-wrap:anywhere;}
+  .trevari-doc .td-page-break-indicator {margin:28px 0!important;padding:12px!important;}
+}
