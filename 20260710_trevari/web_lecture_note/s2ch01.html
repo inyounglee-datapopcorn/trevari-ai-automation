@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="sidebar.css" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="s2ch01-reviews.css" />
+    <link rel="stylesheet" href="s2ch01-video.css" />
   </head>
   <body>
     <div class="layout">
@@ -18,7 +19,29 @@
         <h1>n8n으로 업무용 AI 챗봇 만들기</h1>
         <p class="lead">n8n 기본기를 익히고, 내 업무 자료를 바탕으로 답하는 AI Agent 챗봇을 직접 만듭니다. 책 이야기 30분, 실습 2시간으로 진행합니다.</p>
 
-        <a class="reading-jump" href="#review-room">서로의 독후감 키워드 먼저 보기 <span aria-hidden="true">↓</span></a>
+        <nav class="session-jumps" aria-label="1회차 바로가기">
+          <a class="reading-jump" href="#tutorial">1분 33초 튜토리얼 보기 <span aria-hidden="true">↓</span></a>
+          <a class="reading-jump" href="#review-room">서로의 독후감 키워드 먼저 보기 <span aria-hidden="true">↓</span></a>
+        </nav>
+
+        <section class="session-tutorial" id="tutorial" aria-labelledby="tutorial-title" tabindex="-1">
+          <p class="tutorial-label">모임 전 준비 · 실제 화면 튜토리얼</p>
+          <div class="tutorial-heading"><h2 id="tutorial-title">가입부터 첫 실행까지</h2><span class="tutorial-duration">1분 33초</span></div>
+          <p class="tutorial-summary" id="tutorial-summary">계정 신청 → 계정 설정 → 안내 투어 → 01번 템플릿 실행 → 결과 확인.<br>워크플로우 파일을 따로 받지 않고, 화면을 보며 그대로 따라 해 보세요.</p>
+          <video id="first-run-video" controls playsinline preload="metadata" width="1920" height="1080" poster="media/2611/n8n-signup-first-run.jpg" aria-label="n8n 실습 계정 가입부터 첫 워크플로우 실행까지" aria-describedby="tutorial-summary">
+            <source src="media/2611/n8n-signup-first-run.mp4" type="video/mp4" />
+            <track kind="captions" src="media/2611/n8n-signup-first-run.vtt" srclang="ko" label="한국어" />
+            이 브라우저에서 영상이 재생되지 않으면 <a href="media/2611/n8n-signup-first-run.mp4">MP4 파일을 내려받아 보세요.</a>
+          </video>
+          <p class="tutorial-note">한국어 음성·자막 포함 · MP4 약 32MB · 가입과 첫 실행 안내이며, 업무 챗봇 제작이나 API 발급 과정은 포함하지 않습니다.</p>
+          <div class="tutorial-actions">
+            <a class="tutorial-primary" href="https://n8n-demo.datapopcorn.ai/form/demo-signup" target="_blank" rel="noopener noreferrer">실습 계정 신청</a>
+            <a href="https://n8n-demo.datapopcorn.ai/" target="_blank" rel="noopener noreferrer">데모 서버 접속</a>
+            <a href="media/2611/n8n-signup-first-run.mp4" download>영상 내려받기</a>
+            <a href="media/2611/n8n-signup-first-run.srt" download>자막 내려받기</a>
+          </div>
+          <p class="tutorial-safety">실습 서버에는 실제 업무 계정·중요한 API 키·개인정보·사내 기밀을 연결하지 마세요.</p>
+        </section>
 
         <hr />
 
