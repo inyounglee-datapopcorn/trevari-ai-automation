@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="s2ch01-reviews.css" />
     <link rel="stylesheet" href="s2ch01-video.css" />
+    <link rel="stylesheet" href="s2ch01-recap.css" />
   </head>
   <body>
     <div class="layout">
@@ -22,6 +23,7 @@
         <nav class="session-jumps" aria-label="1회차 바로가기">
           <a class="reading-jump" href="#tutorial">1분 33초 튜토리얼 보기 <span aria-hidden="true">↓</span></a>
           <a class="reading-jump" href="#review-room">서로의 독후감 키워드 먼저 보기 <span aria-hidden="true">↓</span></a>
+          <a class="reading-jump" href="#session-recap">11/13 모임 요약 보기 <span aria-hidden="true">↓</span></a>
         </nav>
 
         <section class="session-tutorial" id="tutorial" aria-labelledby="tutorial-title" tabindex="-1">
@@ -244,6 +246,116 @@
 
   <div class="td-accent"></div>
 </div>
+
+        <hr />
+
+        <section class="session-recap" id="session-recap" aria-labelledby="session-recap-title" tabindex="-1">
+          <div class="recap-head">
+            <span class="recap-badge">2기 1회차 모임 요약 · 2026.11.13 (금)</span>
+            <h2 id="session-recap-title">📝 11월 13일, 우리가 나눈 이야기</h2>
+            <p class="recap-lead">트레바리 강남 아지트 세미나룸에서 열린 2기 첫 모임의 핵심을 정리했습니다. 각자의 반복 업무와 참여 이유를 나눈 뒤, <strong>왜 나만의 AI 기준이 필요한지</strong>, <strong>클로드 코드 시대에 왜 n8n 구조를 이해해야 하는지</strong>, 그리고 <strong>자동화 이후에도 사람에게 남길 일</strong>을 함께 토론하고 AI Agent 챗봇 원리를 시연으로 확인했습니다.</p>
+          </div>
+
+          <div class="recap-takeaways" aria-label="1회차 핵심 한눈에 보기">
+            <div class="recap-takeaway">
+              <span class="recap-takeaway-label">WHY · 기준 먼저 잡기</span>
+              <p>남들이 하니까(FOMO)가 아니라, <strong>아낀 시간으로 무엇을 지킬지</strong> 내 기준부터 세워야 지치지 않습니다.</p>
+            </div>
+            <div class="recap-takeaway">
+              <span class="recap-takeaway-label">HOW · 구조 읽는 눈</span>
+              <p>AI가 99%를 짜줘도 <strong>마지막 1% 오류·통제·책임</strong>은 사람이 맡아야 하기에 n8n으로 흐름의 해부도를 익힙니다.</p>
+            </div>
+            <div class="recap-takeaway">
+              <span class="recap-takeaway-label">WHAT · 챗봇 3요소</span>
+              <p>커스텀 AI 챗봇은 <strong>Model(두뇌) · Memory(기억) · Tool(도구)</strong>의 조합이며, <strong>Publish(게시)</strong>를 켜야 자동 실행됩니다.</p>
+            </div>
+          </div>
+
+          <div class="recap-cards">
+            <article class="recap-card">
+              <h3>1. 오프닝과 모인 사람들의 출발점</h3>
+              <ul>
+                <li><strong>트레바리 안내 (이원철 파트너):</strong> 파트너는 클럽장님과 함께 진행을 돕는 같은 멤버입니다. 정규 4회차 외 타 클럽을 방문할 수 있는 <strong>놀러가기 이용권</strong>(인기 모임은 독후감을 일찍 써 두는 것이 유리 — 이날도 본 모임 17명 전원 제출로 놀러가기 2석은 마감)과 멤버십 기간 내 앱으로 신청 가능한 <strong>아지트 대관</strong>(강남·안국 등)을 꼭 활용해 보시길 권했습니다.</li>
+                <li><strong>2기 운영 방향 (이인영 클럽장):</strong> 데이터 엔지니어·분석가 경력을 거쳐 현재 AI 자동화 교육·컨설팅(데이터팝콘)을 운영 중이며, 국내 최초 <strong>n8n 공식 앰배서더</strong>로서 최근 독일 본사 컨퍼런스에도 다녀왔습니다. 1기 번개 모임에서 호응이 컸던 실전 주제를 이번 2기 정규 4회차(챗봇 → AI 비서 → 브라우저 AI → 15초 숏폼)로 편성해, 매 회차 손에 잡히는 결과물을 가져가는 것을 목표로 합니다.</li>
+                <li><strong>멤버들이 자동화하고 싶은 일 (직군·목표 요약):</strong> 공공기관 정책·매뉴얼 담당, 스타트업 본업 외 회계·마케팅, 부업(N잡) 운영, 영상·콘텐츠 기획·편집, AI 이미지 생성 앱·툴 개발, 교육 서비스 마케팅, 연구·투자 등 다양한 실무자들이 모였습니다. 공통적으로 <strong>반복·행정 시간 줄이기</strong>, 건바이건 AI 사용을 <strong>전체 업무 흐름으로 연결하기</strong>, <strong>API·MCP와 작동 원리를 이해해 직접 만들기</strong>를 목표로 꼽았습니다.</li>
+              </ul>
+              <p class="recap-footnote">※ 세미나룸 배정으로 책상이 좁아 1회차는 클럽장 화면 시연·원리 이해 중심으로 진행했고, 사전 배포한 1분 33초 튜토리얼(AI 음성 클로닝 Fish Audio 활용)과 데모 서버로 집에서 바로 복습할 수 있도록 안내했습니다.</p>
+            </article>
+
+            <article class="recap-card recap-card--accent">
+              <h3>2. 클럽장의 메시지 ① — "AI를 왜 쓰는지, 나만의 기준부터 잡기"</h3>
+              <p>AI 자동화는 <strong>시간</strong>과 <strong>비용</strong>을 줄여줄 뿐 아니라, 매일 반복되던 무의미한 작업에서 오는 <strong>심리적 스트레스</strong>를 덜어줍니다. 하지만 "지금 못 따라가면 뒤처진다"는 공포 마케팅에 휘둘려 시작하면, 정작 아낀 시간에 다른 업무가 3~5배 더 쌓여 번아웃이 오고 금방 원래 방식으로 돌아가기 쉽습니다.</p>
+              <div class="recap-quote">
+                <strong>"More Sleep, More Sunshine, More Love" (+ More Money)</strong><br>
+                클럽장이 AI를 쓰는 기준은 <strong>주말은 쉬고, 점심 뒤 1시간은 햇빛을 보며 산책하고, 가족·이웃과 시간을 보내는 것</strong>입니다. 회사나 유행이 아니라, 내가 진짜 지키고 싶은 삶과 목표를 먼저 정해두어야 AI 공부를 끝까지 이어갈 수 있습니다.
+              </div>
+            </article>
+
+            <article class="recap-card">
+              <h3>3. 클럽장의 메시지 ② — "클로드 코드 시대에도 왜 n8n을 배울까?"</h3>
+              <p>요즘은 Claude Code·Codex 같은 에이전트에게 말만 하면 워크플로우와 웹 서비스까지 뚝딱 만들어 줍니다. 그런데도 <strong>n8n</strong>(<code>nodemation</code>에서 <code>n</code>과 <code>n</code> 사이 8글자를 줄인 이름, 최근 v3 리브랜딩)을 익혀야 하는 이유는 <strong>AI가 만든 결과를 읽고 통제하기 위해서</strong>입니다.</p>
+              <div class="recap-compare">
+                <div class="recap-compare-box">
+                  <strong>자율주행차 (Claude Code·생성형 AI)</strong>
+                  <p>목적지까지 99%를 대신 데려다주지만, <strong>확률적(Probabilistic)</strong>으로 동작해 같은 요청에도 답이 달라질 수 있고 골목길·예외 상황의 마지막 1%는 직접 운전할 줄 알아야 합니다.</p>
+                </div>
+                <div class="recap-compare-box is-highlight">
+                  <strong>설계도와 계기판 (n8n 워크플로우)</strong>
+                  <p>단계가 눈으로 보이고 <strong>결정론적(Deterministic)</strong> 규칙을 강제할 수 있습니다. 오늘 되던 자동화가 내일 멈췄을 때 <strong>어느 노드가 고장 났는지 해부도처럼 찾아 고치는 힘</strong>을 길러줍니다.</p>
+                </div>
+              </div>
+              <p class="recap-subhead">실무 자동화에서 놓치지 말아야 할 안전장치: Human-in-the-loop</p>
+              <p>AI는 대신 책임을 져주지 않습니다. 고객 문의 분류·문서 초안·결제 준비처럼 중요한 일은 AI가 초안을 만든 뒤 <strong>최종 발송·승인 버튼은 사람이 누르는 구조(Human-in-the-loop)</strong>로 설계해야 안전합니다. 100% 손으로 노드를 짜지 않더라도, AI가 짜준 흐름을 검수할 수 있는 로직 이해력이 핵심입니다.</p>
+            </article>
+
+            <article class="recap-card">
+              <h3>4. 북토크 토론 — "자동화가 다 해준 뒤, 남는 일과 맡길 수 없는 일"</h3>
+              <ul>
+                <li><strong>실행은 AI에게, '기획·감각·책임'은 사람에게:</strong> 영상 편집이나 초안 작성 시간이 며칠에서 몇 분으로 줄어든 뒤에는, 남는 시간에 책을 읽고 사람을 만나 경험을 쌓으며 <strong>"무엇을 어떤 관점으로 만들 것인가"</strong>를 기획하는 힘이 진짜 경쟁력이 된다는 경험이 공유됐습니다. 내용증명 초안처럼 AI가 거침없이 강한 문구를 써줄 때도 수위 조절과 최종 책임은 사람 몫이라는 점에 공감했습니다.</li>
+                <li><strong>규제·보안과 AI 활용 양극화:</strong> 개인정보·민감 데이터를 AI가 다루지 못하게 하는 법적·사내 보안 기준과, 세무사 시험 AI 안경 부정행위 논란처럼 기술을 따라가지 못하는 제도의 공백, 그리고 요금제 고가화에 따른 활용 격차에 대한 고민을 나눴습니다.</li>
+                <li><strong>능동적(Proactive) AI 비서와 하네스(Harness):</strong> 질문해야 답하던 챗봇을 넘어 일정·맥락을 보고 먼저 제안하는 AI 비서(피클·Dots·Muse·Grok Bot 등)와 위험 행동을 막는 안전장치(하네스)를 살펴봤습니다. 2~3주마다 쿠팡 장바구니에 우유·시리얼을 미리 담아두는 루틴과 세금 납부 전 잔고 확인 실험, 그리고 파트너님이 공유한 브라우저 에이전트(Aside)+카카오톡 MCP 기반 세무 자료 자동 분류(검수 시간 대폭 단축) 및 AI 음성 보고 브리핑 사례는 AI를 어디까지 위임할 수 있는지 생생히 보여주었습니다.</li>
+                <li><strong>세탁기의 역설:</strong> 세탁기가 발명됐지만 빨래를 더 자주 하게 되어 가사 시간이 줄지 않았듯, AI로 처리 속도가 빨라질수록 인력을 늘리기보다 하루에 돌리는 일의 가짓수가 늘어(2~3건 → 10건) 더 바빠지는 현상과 신입 채용 축소 체감도 이야기했습니다.</li>
+                <li><strong>끝내 AI에게 못 맡기는 세 가지:</strong>
+                  ① <strong>금융·계좌·통합 로그인:</strong> 계좌 조회나 모든 서비스 로그인 권한을 넘기는 보안·분실 우려 ② <strong>가족·돌봄·인간관계:</strong> AI 캐릭터 챗 시장이나 영화 <em>A.I.</em>·<em>Her</em>, 어머니 레시피를 재현한 로보틱스 사례를 이야기하며, 감정을 흉내 낼 수 있어도 배우자·자녀·부모와의 진짜 관계는 대신할 수 없다는 결론을 나눴습니다 ③ <strong>깊이 있는 독서와 사유의 과정:</strong> 요약만 보면 문맥과 생각하는 힘이 사라진다는 의견과 함께, 반대로 대화·회의를 스마트폰 녹음이나 클로바노트·다글로·티로·Plaud Note·옵시디언+MCP로 기록해 나만의 자산으로 쌓는 방법도 공유했습니다.</li>
+              </ul>
+            </article>
+
+            <article class="recap-card">
+              <h3>5. n8n &amp; AI Agent 챗봇 원리 시연 핵심</h3>
+              <ul>
+                <li><strong>3T 프레임워크와 노코드 로직:</strong> 모든 자동화는 <strong>Trigger(언제) → Task(무엇을) → Target(어디로)</strong>로 나눕니다. 코딩 문법을 외우는 대신, <em>'땅콩버터 젤리 샌드위치 만들기'</em>처럼 컴퓨터가 오해하지 않도록 <strong>절차를 빠짐없이 논리적으로 쪼개는 사고방식</strong>이 노코드의 본질입니다.</li>
+                <li><strong>테스트 실행 vs Publish(게시):</strong> 캔버스에서 누르는 <code>Execute Workflow</code>는 테스트용입니다. 시간 기반(<code>Schedule Trigger</code> — 예: 3시간마다 체크) 또는 이벤트 기반(<code>Chat</code>·<code>Webhook</code>) 트리거를 연결한 뒤 <strong>반드시 Publish(게시)를 켜야</strong> 내가 자는 새벽에도 자동으로 돌아갑니다.</li>
+                <li><strong>실무 흐름 시연:</strong> 쿠팡·네이버 스마트스토어 신규 주문 알림 워크플로우(주기 체크·중복 방지·슬랙 전송)와 샘플 주문 데이터에서 <code>5만 원 이상</code>만 걸러내는 <code>Filter</code> 노드를 통해 Input → Output 데이터 흐름을 확인했습니다.</li>
+              </ul>
+              <p class="recap-subhead">커스텀 AI 챗봇(<code>Chat Trigger</code> + <code>AI Agent</code>)을 구성하는 3요소</p>
+              <p><strong>ChatGPT는 완성된 서비스 이름, GPT는 두뇌(모델) 이름</strong>입니다. n8n에서는 두뇌·기억·도구를 직접 조립해 우리 회사 자료와 보안 기준에 맞는 별도 환경(로컬·자체 서버 등)에서 전용 챗봇 뼈대를 5분 만에 만들 수 있습니다.</p>
+              <div class="recap-trio">
+                <div class="recap-trio-item">
+                  <strong>① Model (두뇌)</strong>
+                  <span>업무 난이도·비용에 맞춰 모델을 고르고, System Message(Role · Task · Context · Format)로 한국어 응답과 규칙을 강제합니다.</span>
+                </div>
+                <div class="recap-trio-item">
+                  <strong>② Memory (기억)</strong>
+                  <span>메모리를 빼면 바로 앞 대화("내 이름은 팝콘")도 잊는 실험을 통해, 대화 맥락을 이어가려면 기억 노드가 필수임을 확인했습니다.</span>
+                </div>
+                <div class="recap-trio-item">
+                  <strong>③ Tool (도구)</strong>
+                  <span>날짜 정보나 계산기(Calculator)·검색 도구 없이 모델만 두면 현재 시점이나 정밀 계산에 취약하므로 필요한 도구를 연결해 줍니다.</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="recap-card recap-card--next">
+              <h3>6. 다음 모임(12/11) 전까지 &amp; 앞으로의 여정</h3>
+              <ol>
+                <li><strong>데모 서버에서 1~4단계 복습하기:</strong> <a href="https://n8n-demo.datapopcorn.ai/" target="_blank" rel="noopener noreferrer">n8n 데모 서버</a>에 접속해 1~4단계 챗봇·주문 템플릿을 직접 실행해 보고, 내 반복 업무 1개를 3T로 나눠 스케치해 보세요. (※ 공용 서버이므로 실제 업무 계정·API 키·사내 비밀·개인정보는 넣지 마세요.)</li>
+                <li><strong>2회차 실습 준비와 멤버 피드백 반영:</strong> 다음 모임부터는 <strong>개인 노트북 지참·충전</strong> 후 단계별 따라 하기 비중을 높이고, 실제 유즈케이스(공모전·업무 자동화·툴 비교)와 API/MCP 기초 개념도 함께 보강할 예정입니다.</li>
+                <li><strong>2~4회차 커리큘럼 예고:</strong> <strong>2회차(12/11)</strong> 『진짜 노동』 + 24시간 AI 비서(피클·Dots·Muse 등 비교·세팅) → <strong>3회차(1/8)</strong> 「이제 직원 급여도 AI가 보냅니다」 + 브라우저 AI(<code>Aside</code>) → <strong>4회차(2/12)</strong> 『파타고니아, 파도가 칠 때는 서핑을』 + AI 15초 숏폼(다수 자동화 채널 사례·AI 영상 제작 비용과 기획 현실).</li>
+                <li><strong>모임 사이 혜택 챙기기:</strong> 카톡방의 <strong>번추위(월간 번개 모임 추진)</strong>에 가볍게 참여해 보시고, 개별 업무·도입 고민이 있다면 <a href="https://cal.com/data.popcorn/trevari-1on1" target="_blank" rel="noopener noreferrer">30분 무료 1:1 상담</a>과 카톡방 공지의 <strong>인프런 강의 90% 할인 쿠폰</strong>(연말까지 등록, 등록 후 24시간 내 사용)을 적극 활용해 주세요.</li>
+              </ol>
+            </article>
+          </div>
+        </section>
 
         <h3>이번 회차 체크리스트</h3>
         <ul style="list-style-type: none; padding-left: 0; font-size: 1rem; line-height: 2.2;">
